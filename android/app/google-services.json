@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "173897525733",
+    "project_id": "app-49894",
+    "storage_bucket": "app-49894.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173897525733:android:61ad3c2bb0c1ac6778a70c",
+        "android_client_info": {
+          "package_name": "com.aps.appviajes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQEgUgsNBIOSQbzeQkvmpdkXLSId-EML0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
