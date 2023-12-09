@@ -1,6 +1,7 @@
 import 'package:appviajes/screens/login/SignInReal.dart';
 import 'package:appviajes/screens/login/SignUpScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class SignInScreen extends StatelessWidget {
   @override
@@ -12,14 +13,16 @@ class SignInScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center, // Centra los widgets horizontalmente
             children: <Widget>[
-              Image.asset(
-                'assets/images/logooo.jpg',
-                width: 200, // Ancho de la imagen
-                height: 200, // Alto de la imagen
-              ),
-              const SizedBox(height: 30.0),
+Lottie.asset(
+  'assets/animacion/animacionLogo.json',
+  fit: BoxFit.cover,
+  width: 300, // Establece el ancho deseado
+  height: 300, // Establece el alto deseado
+)
+,
+              const SizedBox(height: 70.0),
               const Text(
-                'Welcome to Our Gozan\nTravel Mobile App',
+                'Bienvenido a Kave MX\nApp de Viaje',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 24.0,
@@ -28,26 +31,29 @@ class SignInScreen extends StatelessWidget {
               ),
              const SizedBox(height: 20.0),
               const Text(
-                'Travel around the word with just tap,\nand enjoy your holiday.',
-                textAlign: TextAlign.center,
+                "Viaja por el mundo con solo un toque,\ny disfruta de tus vacaciones.",
+          textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16.0,
                 ),
               ),
               SizedBox(height: 40.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange, // Color de fondo del botón
-                  onPrimary: Colors.white, // Color del texto del botón
-                  minimumSize: Size(double.infinity, 50), // Ancho infinito para el botón
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.orange, // Color de fondo del botón
+                    onPrimary: Colors.white, // Color del texto del botón
+                    minimumSize: Size(double.infinity, 50), // Ancho infinito para el botón
+                  ),
+                  onPressed: () {
+                     Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignInReal()),
+                        );
+                  },
+                  child: Text('INICIAR SESION'),
                 ),
-                onPressed: () {
-                   Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignInReal()),
-                      );
-                },
-                child: Text('Sign In'),
               ),
               SizedBox(height: 20.0),
               TextButton(
@@ -57,14 +63,9 @@ class SignInScreen extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => SignUpScreen()),
                       );
                 },
-                child: Text('Sign Up'),
+                child: Text('Registrarse'),
               ),
-              TextButton(
-                onPressed: () {
-                  // Funcionalidad para cuentas existentes
-                },
-                child: Text('Already have an account? Sign Up'),
-              ),
+             
             ],
           ),
         ),

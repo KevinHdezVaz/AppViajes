@@ -1,5 +1,7 @@
- import 'package:appviajes/screens/Onboarding/SignInScreen.dart';
+import 'package:appviajes/screens/Onboarding/SignInScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -10,32 +12,59 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
 
-  List<Widget> _pages = [
-    OnboardingPage(
-      title: 'Enjoy tour with open mind',
-      content:
-          'Exploring new places and trying new things can be intimidating, but successfully navigating these experiences.',
-      image: 'assets/onboarding/illustration.png',
-    ),
-    OnboardingPage(
-      title: 'Traveling teaches you',
-      content:
-          'Traveling allows you to experience different cultures firsthand and gain a greater understanding and appreciation of diversity.',
-      image: 'assets/onboarding/illustration1.png',
-    ),
-    OnboardingPage(
-      title: 'Let’s travel destination',
-      content:
-          'The US is a vast country with diverse cultures, and attractions, making it a great destination for summer vacations.',
-      image: 'assets/onboarding/illustration2.png',
-    ),
-    OnboardingPage(
-      title: 'Explore something new',
-      content:
-          'We overcome new difficulties and problems. In such a manner we get out of our comfort zone.',
-      image: 'assets/onboarding/illustration3.png',
-    ),
-  ];
+   @override
+  void initState() {
+    super.initState();
+    _checkOnboardingComplete();
+  }
+
+void _checkOnboardingComplete() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool onboardingComplete = prefs.getBool('onboardingComplete') ?? false;
+
+    if (onboardingComplete) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SignInScreen()),
+      );
+    }
+  }
+  void _completeOnboarding() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingComplete', true);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SignInScreen()),
+    );
+  }
+
+  final List<Widget> _pages = [
+  OnboardingPage(
+    title: 'Disfruta el tour con una mente abierta',
+    content:
+        'Explorar nuevos lugares y probar cosas nuevas puede ser intimidante, pero navegar exitosamente estas experiencias.',
+    lottieAnimation: 'assets/animacion/animacion4.json',
+  ),
+  OnboardingPage(
+    title: 'Viajar te enseña',
+    content:
+        'Viajar te permite experimentar diferentes culturas de primera mano y ganar un mayor entendimiento y apreciación de la diversidad.',
+    lottieAnimation: 'assets/animacion/animacion2.json',
+  ),
+  OnboardingPage(
+    title: 'Vamos al destino de viaje',
+    content:
+        'Cancún ciudad con culturas diversas y atracciones, lo que lo convierte en un gran destino para las vacaciones de verano.',
+    lottieAnimation: 'assets/animacion/animacion1.json',
+  ),
+  OnboardingPage(
+    title: 'Explora algo nuevo',
+    content:
+        'Superamos nuevas dificultades y problemas. De tal manera salimos de nuestra zona de confort.',
+    lottieAnimation: 'assets/animacion/animacion3.json',
+  ),
+];
+
 
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
@@ -67,8 +96,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             onPressed: () {
               _pageController.jumpToPage(_pages.length - 1);
             },
-            child: Text('Skip',
+            child: Text('Omitir',
                 style: TextStyle(
+                  fontSize: 17,
                   color: Colors.orange,
                   fontWeight: FontWeight.bold,
                 )),
@@ -98,12 +128,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ? Padding(
                   padding: EdgeInsets.all(20.0),
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignInScreen()),
-                      );
-                    },
+                     onPressed: _completeOnboarding,
+
                     style: ElevatedButton.styleFrom(
                       primary: Colors.orange,
                       onPrimary: Colors.white,
@@ -114,7 +140,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       minimumSize: Size(
                           double.infinity, 50), // Ancho infinito para el botón
                     ),
-                    child: Text('Start'),
+                    child: Text('Comenzar'),
                   ),
                 )
               : SizedBox.shrink(),
@@ -127,12 +153,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 class OnboardingPage extends StatelessWidget {
   final String title;
   final String content;
-  final String image;
+  final String lottieAnimation;
 
   OnboardingPage({
     required this.title,
     required this.content,
-    required this.image,
+    required this.lottieAnimation,
   });
 
   @override
@@ -142,7 +168,7 @@ class OnboardingPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.asset(image, fit: BoxFit.cover),
+          Lottie.asset(lottieAnimation, fit: BoxFit.cover),
           Padding(
             padding: EdgeInsets.all(20.0),
             child: Column(
