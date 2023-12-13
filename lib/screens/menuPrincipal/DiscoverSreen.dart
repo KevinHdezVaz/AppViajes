@@ -11,12 +11,12 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   int _selectedCategoryIndex = 0;
   String _selectedSubcategory = 'Most viewed';
 
-  final List<Map<String, dynamic>> categories = [
-    {'icon': Icons.flight, 'text': 'Flights'},
-    {'icon': Icons.hotel, 'text': 'Hotel'},
-    {'icon': Icons.directions_bus, 'text': 'Bus'},
- 
-  ];
+final List<Map<String, dynamic>> categories = [
+  {'icon': Icons.explore, 'text': 'Tours ciudad'},
+  {'icon': Icons.family_restroom, 'text': 'Privados'},
+  {'icon': Icons.directions_bus, 'text': 'Transportación'},
+];
+
 
   void _onCategorySelected(int index) {
     setState(() {
@@ -40,7 +40,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         child: Text(
           subcategory,
           style: TextStyle(
-            color: isSelected ? Colors.orange : Colors.grey,
+            color: isSelected ? Color.fromARGB(252, 84, 0, 132) : Colors.grey,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -110,27 +110,30 @@ appBar: AppBar(
                         style: Theme.of(context).textTheme.headline4,
                       ),
                       Text(
-                        'Explore the beautiful world',
+                        'Explora tu destino favorito.',
                         style: TextStyle(color: Colors.grey, fontSize: 19),
                       ),
                     ],
                   ),
       
-                  SizedBox(height: 10), // Espacio entre widgets
+                  SizedBox(height: 20), // Espacio entre widgets
       
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Wrap(
-                      spacing: 20, // Espacio horizontal entre los elementos
-                      children: List.generate(categories.length, (index) {
-                        return _categoryButton(
-                          context,
-                          categories[index]['icon'],
-                          categories[index]['text'],
-                          _selectedCategoryIndex == index,
-                          index,
-                        );
-                      }),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: Wrap(
+                        spacing: 20, // Espacio horizontal entre los elementos
+                        children: List.generate(categories.length, (index) {
+                          return _categoryButton(
+                            context,
+                            categories[index]['icon'],
+                            categories[index]['text'],
+                            _selectedCategoryIndex == index,
+                            index,
+                          );
+                        }),
+                      ),
                     ),
                   ),
       
@@ -184,7 +187,7 @@ appBar: AppBar(
         });
       },
       style: ElevatedButton.styleFrom(
-        primary: isSelected ? Colors.orange : Colors.white, // Color de fondo
+        primary: isSelected ? Color.fromARGB(252, 84, 0, 132)  : Colors.white, // Color de fondo
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0), // Redondear las esquinas
         ),

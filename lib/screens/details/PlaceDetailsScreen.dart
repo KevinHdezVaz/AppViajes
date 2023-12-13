@@ -92,7 +92,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                   ),
                   Row(
                     children: [
-                      Icon(Icons.star, color: Colors.orange),
+                      Icon(Icons.star, color: Color.fromARGB(252, 84, 0, 132) ),
                       Text('${widget.rating}',
                           style: TextStyle(fontSize: 18, color: Colors.grey)),
                       Text('(${widget.membersCount}+ Trips Members)',

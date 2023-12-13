@@ -105,13 +105,13 @@ class _SignInRealState extends State<SignInReal> {
                           borderRadius: BorderRadius.circular(
                               10.0), // Esquinas redondeadas
                           borderSide: BorderSide(
-                              color: Colors.orange,
+                              color: Color.fromARGB(252, 84, 0, 132) ,
                               width: 2.0), // Color y grosor del borde
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide:
-                              BorderSide(color: Colors.orange, width: 2.0),
+                              BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -134,13 +134,13 @@ class _SignInRealState extends State<SignInReal> {
                           borderRadius: BorderRadius.circular(
                               10.0), // Esquinas redondeadas
                           borderSide: BorderSide(
-                              color: Colors.orange,
+                              color: Color.fromARGB(252, 84, 0, 132) ,
                               width: 2.0), // Color y grosor del borde
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide:
-                              BorderSide(color: Colors.orange, width: 2.0),
+                              BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -172,7 +172,7 @@ class _SignInRealState extends State<SignInReal> {
                       },
                       child: Text('INICIAR SESION'),
                       style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
+                          primary: Color.fromARGB(252, 84, 0, 132) ,
                           foregroundColor: Colors.white,
                           minimumSize: Size(double.infinity, 50)),
                     ),
@@ -197,7 +197,7 @@ class _SignInRealState extends State<SignInReal> {
                             );
                           },
                           child: Text('Registrarse',
-                              style: TextStyle(color: Colors.orange)),
+                              style: TextStyle(color: Color.fromARGB(252, 84, 0, 132) )),
                         ),
                       ],
                     ),
@@ -218,7 +218,7 @@ class _SignInRealState extends State<SignInReal> {
             child: CircularProgressIndicator(
               strokeWidth: 3, // El grosor del indicador de progreso
               valueColor: AlwaysStoppedAnimation<Color>(
-                Colors.orange, // Color del indicador de progreso
+                Color.fromARGB(252, 84, 0, 132) , // Color del indicador de progreso
               ),
             ),
           ),

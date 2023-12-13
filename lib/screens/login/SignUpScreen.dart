@@ -1,6 +1,6 @@
 import 'package:appviajes/screens/Onboarding/SignInScreen.dart';
 import 'package:appviajes/screens/login/SignInReal.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -15,6 +15,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _nameController = TextEditingController();
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -26,6 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+        _nameController.dispose();
     super.dispose();
   }
 
@@ -35,6 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _register() async {
+     final String nombre = _nameController.text.trim();
     final String email = _emailController.text.trim();
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
@@ -44,7 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           SnackBar(content: Text("Please enter a valid email address.")));
       return;
     }
-
+ 
     if (password != confirmPassword) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Passwords do not match.")));
@@ -60,8 +64,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: email,
         password: password,
       );
+ 
 
       if (userCredential.user != null) {
+         
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MainMenu()),
@@ -130,24 +136,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(height: 32),
                   TextField(
+                      controller: _nameController,
                     decoration: InputDecoration(
                       labelText: 'Nombre',
                       border: OutlineInputBorder(
                         borderRadius:
                             BorderRadius.circular(10.0), // Bordes redondeados
                         borderSide: BorderSide(
-                            color: Colors.orange), // Color del contorno
+                            color: Color.fromARGB(252, 84, 0, 132) ), // Color del contorno
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                            color: Colors.orange,
+                            color: Color.fromARGB(252, 84, 0, 132) ,
                             width: 2), // Contorno más grueso al enfocar
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                            color: Colors.orange, width: 1), // Contorno normal
+                            color: Color.fromARGB(252, 84, 0, 132) , width: 1), // Contorno normal
                       ),
                     ),
                     keyboardType: TextInputType.name,
@@ -163,13 +170,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         borderRadius:
                             BorderRadius.circular(10.0), // Esquinas redondeadas
                         borderSide: BorderSide(
-                            color: Colors.orange,
+                            color: Color.fromARGB(252, 84, 0, 132) ,
                             width: 2.0), // Color y grosor del borde
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            BorderSide(color: Colors.orange, width: 2.0),
+                            BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -193,12 +200,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            BorderSide(color: Colors.orange, width: 2.0),
+                            BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            BorderSide(color: Colors.orange, width: 2.0),
+                            BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -230,12 +237,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            BorderSide(color: Colors.orange, width: 2.0),
+                            BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            BorderSide(color: Colors.orange, width: 2.0),
+                            BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -265,7 +272,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     child: Text("ENTRAR"),
                     style: ElevatedButton.styleFrom(
-                        primary: Colors.orange,
+                        primary: Color.fromARGB(252, 84, 0, 132) ,
                         foregroundColor: Colors.white,
                         minimumSize: Size(double.infinity, 50)),
                   ),
@@ -283,7 +290,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           );
                         },
                         child: Text('INICIAR SESION',
-                            style: TextStyle(color: Colors.orange)),
+                            style: TextStyle(color: Color.fromARGB(252, 84, 0, 132) )),
                       ),
                     ],
                   ),
@@ -304,7 +311,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: CircularProgressIndicator(
               strokeWidth: 3, // El grosor del indicador de progreso
               valueColor: AlwaysStoppedAnimation<Color>(
-                Colors.orange, // Color del indicador de progreso
+                Color.fromARGB(252, 84, 0, 132) , // Color del indicador de progreso
               ),
             ),
           ),

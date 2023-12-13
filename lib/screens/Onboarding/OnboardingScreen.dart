@@ -81,7 +81,7 @@ void _checkOnboardingComplete() async {
       height: 8.0,
       width: isActive ? 24.0 : 16.0,
       decoration: BoxDecoration(
-        color: isActive ? Colors.orange : Colors.grey,
+        color: isActive ? Color.fromARGB(252, 84, 0, 132)  : Colors.grey,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
@@ -99,7 +99,7 @@ void _checkOnboardingComplete() async {
             child: Text('Omitir',
                 style: TextStyle(
                   fontSize: 17,
-                  color: Colors.orange,
+                  color: Color.fromARGB(252, 84, 0, 132) ,
                   fontWeight: FontWeight.bold,
                 )),
           ),
@@ -131,7 +131,7 @@ void _checkOnboardingComplete() async {
                      onPressed: _completeOnboarding,
 
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.orange,
+                      primary: Color.fromARGB(252, 84, 0, 132) ,
                       onPrimary: Colors.white,
                       textStyle: TextStyle(
                         fontSize: 20.0,

@@ -42,7 +42,7 @@ Lottie.asset(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.orange, // Color de fondo del botón
+                    primary: Color.fromARGB(252, 84, 0, 132) , // Color de fondo del botón
                     onPrimary: Colors.white, // Color del texto del botón
                     minimumSize: Size(double.infinity, 50), // Ancho infinito para el botón
                   ),

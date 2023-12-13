@@ -1184,9 +1184,9 @@ class _MainMenuState extends State<MainMenu> {
 
   // Define your widget options as screens for each tab.
   final List<Widget> _widgetOptions = [
-    DiscoverScreen(), // Replace with actual Discover screen widget
-    ExploreScreen(categorySpots: categorySpots), // Pass the map here
-    ProfileScreen(), // Replace with actual Profile screen widget
+    DiscoverScreen(),  
+    ExploreScreen(categorySpots: categorySpots),  
+    ProfileScreen(), 
   ];
 
   void _onItemTapped(int index) {
@@ -1198,12 +1198,12 @@ class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Expanded(
-        child: Center(
+       
+        body: Center(
           child: _widgetOptions
               .elementAt(_selectedIndex), // Display the selected screen
         ),
-      ),
+      
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -1220,9 +1220,9 @@ class _MainMenuState extends State<MainMenu> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Color.fromARGB(218, 178, 70, 211),
         onTap: _onItemTapped,
-      ),
-    );
+      )    );
+ 
   }
 }

@@ -23,10 +23,10 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: CircleAvatar(
               radius: 50, // Tamaño del avatar
-              backgroundColor: Colors.orange.shade100,
+              backgroundColor: Color.fromARGB(252, 84, 0, 132)  ,
               child: Icon(
                 Icons.edit, // Ícono de editar
-                color: Colors.orange,
+                color: Color.fromARGB(252, 84, 0, 132) ,
                 size: 50, // Tamaño del ícono
               ),
             ),
@@ -89,8 +89,8 @@ Widget _buildLogoutTile(BuildContext context) {
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: Colors.orange.shade100,
-          child: Icon(Icons.exit_to_app, color: Colors.orange),
+          backgroundColor: Color.fromARGB(252, 84, 0, 132) ,
+          child: Icon(Icons.exit_to_app, color: Color.fromARGB(252, 84, 0, 132) ),
         ),
         title: Text('Cerrar sesión', style: TextStyle(color: Colors.black)),
          
@@ -123,8 +123,8 @@ Widget _buildCustomListTile({
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: Colors.orange.shade100,
-          child: Icon(leadingIcon, color: Colors.orange),
+          backgroundColor: Color.fromARGB(252, 84, 0, 132) ,
+          child: Icon(leadingIcon, color: Color.fromARGB(252, 84, 0, 132) ),
         ),
         title: Text(title, style: TextStyle(color: Colors.black)),
         trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
