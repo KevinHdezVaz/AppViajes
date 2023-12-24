@@ -4,20 +4,22 @@ import 'package:carousel_slider/carousel_slider.dart';
 class PlaceDetailsScreen extends StatefulWidget {
   final String title;
   final String location;
-  final String price;
+  final Map<String, dynamic> prices;
   final List<String> imageUrls;
   final String duration;
   final double rating;
   final int membersCount;
+  final List<Map<String, dynamic>> packages;
 
   PlaceDetailsScreen({
     required this.title,
     required this.location,
-    required this.price,
+    required this.prices,
     required this.imageUrls,
     required this.duration,
     required this.rating,
     required this.membersCount,
+    required this.packages,
   });
 
   @override
@@ -60,7 +62,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                         borderRadius: BorderRadius.circular(
                             15.0), // Aplica los bordes redondeados aquí
 
-                        child: Image.asset(
+                        child: Image.network(
                           imageUrl,
                           fit: BoxFit.cover,
                         ),
@@ -80,9 +82,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                   Text(widget.location,
                       style: TextStyle(fontSize: 18, color: Colors.grey)),
-                  Text('${widget.price} /person',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 16),
                   Row(
                     children: [
                       Icon(Icons.timer, color: Colors.grey),
@@ -92,7 +92,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                   ),
                   Row(
                     children: [
-                      Icon(Icons.star, color: Color.fromARGB(252, 84, 0, 132) ),
+                      Icon(Icons.star, color: Color.fromARGB(252, 84, 0, 132)),
                       Text('${widget.rating}',
                           style: TextStyle(fontSize: 18, color: Colors.grey)),
                       Text('(${widget.membersCount}+ Trips Members)',
@@ -109,6 +109,51 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(height: 16),
+                  Text('Paquetes:',
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 16),
+                  Column(
+                    children: widget.packages.map((package) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(package['name'],
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                            ...package['details']
+                                .map((detail) => Text(detail))
+                                .toList(),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  Text('Detalles',
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 16),
+                  Text('Precios (MXN):',
+    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+...widget.prices.entries.map((entry) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text('${entry.key}:',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      ...entry.value.entries.map((priceEntry) => Text(
+        '${priceEntry.key}: ${priceEntry.value}',
+        style: TextStyle(fontSize: 16),
+      )),
+    ],
+  );
+}),
+                  Text(
+                    'Apertura: 9 P.M.\nCierre: 3 A.M.\n*Transportación a partir de 10 pax*',
+                    style: TextStyle(fontSize: 16),
+                  ),
                   Align(
                     alignment: Alignment.center,
                     child: Padding(

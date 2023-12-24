@@ -27,11 +27,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
         builder: (context) => PlaceDetailsScreen(
           title: spot['title'],
           location: spot['location'],
-          price: spot['price'],
+           prices: spot['prices'],
           imageUrls: spot['images'], 
           duration: '3', 
           membersCount: 21,
           rating: 5,
+          packages:spot['packages'],
          ),
       ),
     );

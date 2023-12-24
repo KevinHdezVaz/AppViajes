@@ -12,9 +12,17 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   String _selectedSubcategory = 'Most viewed';
 
 final List<Map<String, dynamic>> categories = [
-  {'icon': Icons.explore, 'text': 'Tours ciudad'},
-  {'icon': Icons.family_restroom, 'text': 'Privados'},
-  {'icon': Icons.directions_bus, 'text': 'Transportación'},
+  {'icon': Icons.explore, 'text': 'Antros'},
+  {'icon': Icons.waves, 'text': 'Acuático'},
+  {'icon': Icons.account_balance, 'text': 'Cultural'},
+    {'icon': Icons.family_restroom, 'text': 'Familiar'},
+    {'icon':Icons.directions_bike, 'text': 'Extremo'},
+    {'icon': Icons.directions_car, 'text': 'Autos'},
+    {'icon': Icons.directions_boat, 'text': 'Yates'},
+    {'icon': Icons.lock, 'text': 'Privados'},
+
+     
+
 ];
 
 
@@ -160,10 +168,12 @@ appBar: AppBar(
                     builder: (context) => PlaceDetailsScreen(
                       title: spot['title'],
                       location: spot['location'],
-                      price: spot['price'],
+                      prices: spot['prices']!!,
+
                       imageUrls: spot['images'],
                       duration: '3 days', // Aquí deberías pasar la duración real
                       rating: 4.7, // Aquí deberías pasar el rating real
+                      packages: spot['packages'],
                       membersCount:
                           20, // Aquí deberías pasar el número real de miembros
                     ),
