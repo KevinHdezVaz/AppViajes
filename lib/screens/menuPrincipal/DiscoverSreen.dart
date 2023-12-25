@@ -1,5 +1,6 @@
 import 'package:appviajes/screens/details/PlaceDetailsScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:particles_flutter/particles_flutter.dart';
 import 'BestNatureList.dart';
 
 class DiscoverScreen extends StatefulWidget {
@@ -58,6 +59,9 @@ final List<Map<String, dynamic>> categories = [
 
   @override
   Widget build(BuildContext context) {
+     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
 appBar: AppBar(
         title: const Row(
@@ -102,86 +106,113 @@ appBar: AppBar(
       ),
       body: SingleChildScrollView(
         
-        child: Column(
-          children: [
-            // Sección para seleccionar categorías y subcategorías
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Column(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment
-                        .start, // Alinea los hijos a la izquierda
-                    children: [
-                      Text(
-                        'Discover',
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                      Text(
-                        'Explora tu destino favorito.',
-                        style: TextStyle(color: Colors.grey, fontSize: 19),
-                      ),
-                    ],
-                  ),
-      
-                  SizedBox(height: 20), // Espacio entre widgets
-      
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Wrap(
-                        spacing: 20, // Espacio horizontal entre los elementos
-                        children: List.generate(categories.length, (index) {
-                          return _categoryButton(
-                            context,
-                            categories[index]['icon'],
-                            categories[index]['text'],
-                            _selectedCategoryIndex == index,
-                            index,
-                          );
-                        }),
-                      ),
-                    ),
-                  ),
-      
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildSubcategoryButton('Most viewed'),
-                      _buildSubcategoryButton('Recommend'),
-                      _buildSubcategoryButton('All'),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-      
-            BestNatureList(
-              category: categories[_selectedCategoryIndex]['text'],
-              subcategoryFilter: _selectedSubcategory,
-              onCardTap: (spot) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PlaceDetailsScreen(
-                      title: spot['title'],
-                      location: spot['location'],
-                      prices: spot['prices']!!,
-
-                      imageUrls: spot['images'],
-                      duration: '3 days', // Aquí deberías pasar la duración real
-                      rating: 4.7, // Aquí deberías pasar el rating real
-                      packages: spot['packages'],
-                      membersCount:
-                          20, // Aquí deberías pasar el número real de miembros
-                    ),
-                  ),
-                );
-              },
-            ),
+        child: Stack(
+          children:[ 
+            CircularParticle(
+          key: UniqueKey(),
+          awayRadius: 10,
+          numberOfParticles: 50,
+          speedOfParticles: 1,
+          height: screenHeight,
+          width: screenWidth,
+          onTapAnimation: true,
+          particleColor: Colors.white.withAlpha(150),
+          awayAnimationDuration: Duration(milliseconds: 600),
+          maxParticleSize: 4,
+          isRandSize: true,
+          isRandomColor: true,
+          randColorList: [
+         Color.fromARGB(255, 232, 171, 29),
+         Color.fromARGB(252, 84, 0, 132)
           ],
+          awayAnimationCurve: Curves.bounceIn,
+          enableHover: true,
+          hoverColor: Colors.white,
+          hoverRadius: 10,
+          connectDots: false, //not recommended
+        ),
+             Column(
+            children: [
+              // Sección para seleccionar categorías y subcategorías
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Column(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment
+                          .start, // Alinea los hijos a la izquierda
+                      children: [
+                        Text(
+                          'Discover',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        Text(
+                          'Explora tu destino favorito.',
+                          style: TextStyle(color: Colors.grey, fontSize: 19),
+                        ),
+                      ],
+                    ),
+                
+                    SizedBox(height: 20), // Espacio entre widgets
+                
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Wrap(
+                          spacing: 20, // Espacio horizontal entre los elementos
+                          children: List.generate(categories.length, (index) {
+                            return _categoryButton(
+                              context,
+                              categories[index]['icon'],
+                              categories[index]['text'],
+                              _selectedCategoryIndex == index,
+                              index,
+                            );
+                          }),
+                        ),
+                      ),
+                    ),
+                
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildSubcategoryButton('Most viewed'),
+                        _buildSubcategoryButton('Recommend'),
+                        _buildSubcategoryButton('All'),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+                
+              BestNatureList(
+                category: categories[_selectedCategoryIndex]['text'],
+                subcategoryFilter: _selectedSubcategory,
+                onCardTap: (spot) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlaceDetailsScreen(
+                        title: spot['title'],
+                        location: spot['location'],
+                        prices: spot['prices']!!,
+          
+                        imageUrls: spot['images'],
+                        duration: '3 days', // Aquí deberías pasar la duración real
+                         detalles: spot['detalles'], // Aquí deberías pasar la duración real,
+                        rating: 4.7, // Aquí deberías pasar el rating real
+                        packages: spot['packages'],
+                        membersCount:
+                            20, // Aquí deberías pasar el número real de miembros
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ), ],
         ),
       ),
     );

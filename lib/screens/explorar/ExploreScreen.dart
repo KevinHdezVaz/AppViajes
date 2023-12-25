@@ -30,6 +30,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
            prices: spot['prices'],
           imageUrls: spot['images'], 
           duration: '3', 
+            detalles: spot['detalles'], // Aquí deberías pasar la duración real,
+
           membersCount: 21,
           rating: 5,
           packages:spot['packages'],
