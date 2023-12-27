@@ -19,26 +19,33 @@ class _ExploreScreenState extends State<ExploreScreen> {
     widget.categorySpots.forEach((category, spots) {
       allSpots.addAll(spots);
     });
- void navigateToDetails(Map<String, dynamic> spot) {
-    // Aquí implementarías la navegación a la pantalla de detalles
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PlaceDetailsScreen(
-          title: spot['title'],
-          location: spot['location'],
-           prices: spot['prices'],
-          imageUrls: spot['images'], 
-          duration: '3', 
+    void navigateToDetails(Map<String, dynamic> spot) {
+      // Aquí implementarías la navegación a la pantalla de detalles
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PlaceDetailsScreen(
+            title: spot['title'],
+            location: spot['location'],
+            prices: spot['prices'],
+            costExtra: spot['cost_extra'],
+            latitud: spot['latitud'],
+            longitud: spot['longitud'],
+            imageUrls: spot['images'],
+            image_price: spot['image_price'],
+            duration: '3',
             detalles: spot['detalles'], // Aquí deberías pasar la duración real,
+            nota: spot['nota'],
+            openingTime: spot['openingTime'],
+            closingTime: spot['closingTime'],
+            membersCount: 21,
+            rating: 5,
+            packages: spot['packages'],
+          ),
+        ),
+      );
+    }
 
-          membersCount: 21,
-          rating: 5,
-          packages:spot['packages'],
-         ),
-      ),
-    );
-  }
     List<Map<String, dynamic>> filteredSpots = searchQuery.isEmpty
         ? allSpots
         : allSpots.where((spot) {
@@ -49,13 +56,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Explore'),
-          
       ),
       body: Column(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-           child: Row(
+            child: Row(
               children: <Widget>[
                 Expanded(
                   child: TextField(
@@ -76,11 +82,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 10), // Espacio entre el campo de búsqueda y el botón
+                SizedBox(
+                    width: 10), // Espacio entre el campo de búsqueda y el botón
                 Container(
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(252, 84, 0, 132) ,
+                    color: Color.fromARGB(252, 84, 0, 132),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: IconButton(
@@ -90,7 +97,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     },
                   ),
                 ),
-                 ],
+              ],
             ),
           ),
           Expanded(
@@ -99,7 +106,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               itemBuilder: (context, index) {
                 var spot = filteredSpots[index];
                 return GestureDetector(
-             onTap: () => navigateToDetails(spot),
+                  onTap: () => navigateToDetails(spot),
                   child: Card(
                     color: Colors.white,
                     margin: EdgeInsets.all(10),
@@ -108,7 +115,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                     child: ListTile(
                       contentPadding: EdgeInsets.all(10),
-                      leading: Image.asset(
+                      leading: Image.network(
                         spot['images'][0],
                         fit: BoxFit.cover,
                         width: 80,
@@ -123,18 +130,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         children: [
                           Text(spot['location'],
                               style: TextStyle(color: Colors.grey)),
-                          Text('\$${spot['price']}',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor)),
+                       
                         ],
                       ),
                       trailing: IconButton(
                         iconSize: 40,
                         icon: Icon(Icons.arrow_circle_right_sharp),
-                        color: Color.fromARGB(252, 84, 0, 132) ,
-                        onPressed: () {
-                         
-                        },
+                        color: Color.fromARGB(252, 84, 0, 132),
+                        onPressed: () {},
                       ),
                     ),
                   ),
