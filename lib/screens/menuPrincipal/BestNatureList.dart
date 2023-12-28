@@ -19,19 +19,14 @@ class BestNatureList extends StatelessWidget {
         'title': 'Coco Bongo',
         'location': 'Cancún',
         'openingTime': '9 P.M.',
-        'latitud':20.6275,
+        'latitud': 20.6275,
         'longitud': -87.0811,
         'precio': '1,462',
-        'image_price':"assets/images/cocobongo_precio.png",
-         
+        'image_price': "assets/images/cocobongo_precio.png",
         'cost_extra': {
-          
-            'Ninguno': '',
-            
-          
-         
+          'Ninguno': '',
         },
-         'nota': 'Transportación a partir de 10 pax', 
+        'nota': 'Transportación a partir de 10 pax',
         'detalles':
             'La disco más popular de México con proyecciones en pantallas gigantes y shows de acróbatas impactantes.\n\nUbicado justo en el corazón de la Zona Hotelera, Coco Bongo Cancún destaca entre decenas de bares y discotecas que forman la capital de la fiesta en México.\n\nA tan sólo una calle del majestuoso Mar Caribe, emerge un coloso espectacular indicando a los viajeros la llegada a la noche más impactante de sus vidas.',
         'closingTime': '3 A.M.',
@@ -122,13 +117,13 @@ class BestNatureList extends StatelessWidget {
         'openingTime': '9 P.M.',
         'precio': '595',
         'closingTime': '3 A.M.',
-        'latitud':21.132413582407267,
+        'latitud': 21.132413582407267,
         'longitud': -86.74684188334079,
-        'image_price':"assets/images/beach_cocobongo.png",
+        'image_price': "assets/images/beach_cocobongo.png",
         'cost_extra': {
-            'Ninguno': '', 
+          'Ninguno': '',
         },
-         'nota': 'Transportación a partir de 10 pax', 
+        'nota': 'Transportación a partir de 10 pax',
         'detalles':
             'Durante tu estancia en Cancún debes visitar Coco Bongo Beach Party, ¡la mejor experiencia en Beach Party con una impresionante vista al mar Caribe! ¡Ninguna otra fiesta será suficiente después de vivir esta emocionante experiencia!\n\nVen y descubre el más imponente Beach Party hecho en México que emerge frente a las aguas cristalinas del majestuoso Mar Caribe y su arena blanca, dando vida a una fiesta interminable de sol, colores y ritmos frescos que robarán el aliento de todos.\n\nEntretenimiento de alto impacto, un mega desfile de tecnología, acrobacias y números nunca antes vistos en una escenario de este tipo te estarán esperando. ¡Conoce una nueva experiencia de entretenimiento en Latinoamérica!',
         'transportation': 'Transportación a partir de 10 pax',
@@ -193,18 +188,16 @@ class BestNatureList extends StatelessWidget {
       {
         'title': 'Congo Bar',
         'location': 'Cancún',
- 
         'openingTime': '9 P.M.',
-
-        'latitud':21.133429920537235,
+        'latitud': 21.133429920537235,
         'longitud': -86.74713098251176,
-         'precio': '800',
-         'image_price':"assets/images/congobar.png",
+        'precio': '800',
+        'image_price': "assets/images/congobar.png",
         'closingTime': '3 A.M.',
         'cost_extra': {
-            'Ninguno': '', 
+          'Ninguno': '',
         },
-         'nota': 'Transportación a partir de 10 pax', 
+        'nota': 'Transportación a partir de 10 pax',
         'detalles':
             '¡Prepárate para disfrutar de una de las mejores noches de tu vida! Congo Bar se ha convertido en el favorito de locales y turistas en su visita a Cancún. \n\nTe sorprenderás con los espectáculos especiales que tenemos para ti con las Congo Girls y nuestros increíbles acróbatas, ¡así que prepara tu celular para tomar muchas fotos y videos! Nuestro dj te hará bailar y te invita a unirte a la conga con todos nuestros visitantes. ¿Estás listo?.',
         'transportation': 'Transportación a partir de 10 pax',
@@ -221,7 +214,7 @@ class BestNatureList extends StatelessWidget {
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/252095849_1558131281204546_7702102367856219740_n.jpg?alt=media&token=73d13757-7711-435a-8157-7e1b4c1ca88a',
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/178614940_1428715184146157_3475934914331347154_n.jpg?alt=media&token=85a4a508-ba14-44c3-bbf4-1e19f019f31f',
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/242805544_1530839743933700_5942285961030479663_n.jpg?alt=media&token=b8c579b8-2d1f-4f42-abdb-4b118f77d66a',
-                 ],
+        ],
         'subcategory': 'Most viewed',
         'packages': [
           {
@@ -230,21 +223,20 @@ class BestNatureList extends StatelessWidget {
           },
         ],
       },
-       
     ],
     'Acuático': [
       {
         'title': 'Jungle Tour',
-        'location': 'Cancún', 
-        'latitud':21.12455832612029,
+        'location': 'Cancún',
+        'latitud': 21.12455832612029,
         'longitud': -86.75501261040323,
         'openingTime': '9 P.M.',
         'precio': '800',
-        'image_price':"assets/images/jungle_price.png",
+        'image_price': "assets/images/jungle_price.png",
         'cost_extra': {
-            'Impuesto de muelle': '360 MXN', 
+          'Impuesto de muelle': '360 MXN',
         },
-         'nota': 'Transportación a partir de 10 pax',
+        'nota': 'Transportación a partir de 10 pax',
         'detalles':
             'Vive la adrenalina de manejar tu propio bote rápido hasta mar abierto donde realizarás snorkel y podrás observar la vida marina.',
         'closingTime': '3 A.M.',
@@ -282,15 +274,15 @@ class BestNatureList extends StatelessWidget {
         'title': 'Isla Mujeres',
         'location': 'Cancún',
         'openingTime': '9 P.M.',
-          'precio': '1,100',
-'latitud':21.23669926206936,
-        'longitud': -86.73555932253596, 
-        'image_price':"assets/images/islamujer.png",
-         'cost_extra': {
-            'Impuesto de muelle': '360 MXN', 
-            'Transportación redonda': '190 MXN'
+        'precio': '1,100',
+        'latitud': 21.23669926206936,
+        'longitud': -86.73555932253596,
+        'image_price': "assets/images/islamujer.png",
+        'cost_extra': {
+          'Impuesto de muelle': '360 MXN',
+          'Transportación redonda': '190 MXN'
         },
-         'nota': 'Transportación a partir de 10 pax', 
+        'nota': 'Transportación a partir de 10 pax',
         'detalles':
             'Diviértete a bordo del catamarán con bebidas y fiesta ilimitada junto con tu familia o amigos. Margaritas, Sex in the beach, Tequila Sunrise, Cerveza, Jugos, Refrescos, etc. \nSumérgete en mar abierto y descubre la vida submarina en el museo sub-acuático MUSA. Peces, tortugas y corales te acompañarán en tu aventura acuática. \n\nAdemás realiza una visita exprés al centro de Isla Mujeres para conocer y comprar souvenirs. Relájate en el club de playa privado donde podrás disfrutar de un delicioso bufete y las comodidades como camastros, jugar voleyball, remar en canoas, fotos para tus redes sociales, servicio de mesero y más!!! \n\nPor si fuera poco, visita una de las playas más famosas de todo México "Playa Norte". Podrás caminar y nadar con toda tranquilidad hasta 40 metros y el agua te llegará hasta el pecho. \n\n\nVive la adrenalina en el Spinnaker al elevarte y tirarte de 20 metros de altura en mar abierto.',
         'closingTime': '3 A.M.',
@@ -334,20 +326,17 @@ class BestNatureList extends StatelessWidget {
         'title': 'Chichen Itza',
         'location': 'Cancún',
         'openingTime': '9 P.M.',
-      'cost_extra': {
-            'Ninguno': '', 
-             
+        'cost_extra': {
+          'Ninguno': '',
         },
-        'latitud':20.68432348897362,
+        'latitud': 20.68432348897362,
         'longitud': -88.56779588670287,
-         'precio': '1,200',
-        'image_price':"assets/images/chichenitza.png",
-      
+        'precio': '1,200',
+        'image_price': "assets/images/chichenitza.png",
         'detalles':
             'Descubre lo mejor de la cultura maya y aprende más sobre una de las 7 maravillas del mundo Chichén Itzá.\n\nNada y refréscate en un cenote. Cuenta la leyenda que las aguas del cenote tienen la propiedad de rejuvenecer 10 años a las personas y los mayas los consideraban la entrada al inframundo.Disfruta de un delicioso buffet con auténtica comida regional yucateca como cochinita pibil, sopa de lima, entre otros.\n\nVisita uno de los pueblos mágicos Valladolid .Todo esto a bordo de un autobús con A/A desde la comodidad de tu hotel y un guía bilingüe certificado que te llevará de la mano a conocer todos y cada uno de estos lugares.',
         'closingTime': '3 A.M.',
-        
-         'nota': 'Hora de recogida dependerá del hotel', 
+        'nota': 'Hora de recogida dependerá del hotel',
         'transportation': 'Transportación a partir de 10 pax',
         'prices': {
           'Todos los dias': {
@@ -421,16 +410,15 @@ class BestNatureList extends StatelessWidget {
       {
         'title': '4x1 (Tulum, Cobá, Cenote y Playa del Carmen)',
         'location': 'Cancún',
-         'precio': '1,200',
-        'openingTime': '9 P.M.', 
-        'latitud':20.21152406491527,
+        'precio': '1,200',
+        'openingTime': '9 P.M.',
+        'latitud': 20.21152406491527,
         'longitud': -87.46516059163379,
-         'image_price':"assets/images/chichenitza.png",
-       'cost_extra': {
-            'Ninguno': '', 
-             
+        'image_price': "assets/images/chichenitza.png",
+        'cost_extra': {
+          'Ninguno': '',
         },
-         'nota': 'Hora de recogida dependerá del hotel', 
+        'nota': 'Hora de recogida dependerá del hotel',
         'detalles':
             'En este fantástico tour "4x1" visita 4 atracciones turísticas en un solo día. Conoce acerca de la cultura maya en Tulum y tómate fotos en las pirámides que están frente al mar turquesa. \n\nDéjate sorprender por los 45 metros de altura de la pirámide "Nohoch Mool", donde sentirás la conexión con la naturaleza y la cultura maya. Podrás rentar una bicicleta para recorrer la zona arqueológica o un tricitaxi para transportarte.\n\nPara refrescarte nadaremos en un cenote subterráneo donde quedarás impresionado con las maravillas que la naturaleza crea.Además degustarás un exquisito buffet de comida regional yucateca como sopa de lima, cochinita pibil, papatzules, cotzitos, etc.\n\nTodo esto a bordo de un autobús de lujo con aire acondicionado y un guía bilingüe certificado que te llevará de la mano a todos y cada uno de los lugares',
         'closingTime': '3 A.M.',
@@ -512,16 +500,16 @@ class BestNatureList extends StatelessWidget {
         'title': 'Barco Pirata (Capitan Hook)',
         'location': 'Cancún',
         'openingTime': '9 P.M.',
-         'precio': '1,520',
-          'latitud':21.14406659165124,
+        'precio': '1,520',
+        'latitud': 21.14406659165124,
         'longitud': -86.78627714437395,
-         'image_price':"assets/images/barcopirata.png",
-
-         'cost_extra': {
-            'Impuesto de muelle': '360 MXN', 
-               'Transportación redonda': '190 MXN',  
+        'image_price': "assets/images/barcopirata.png",
+        'cost_extra': {
+          'Impuesto de muelle': '360 MXN',
+          'Transportación redonda': '190 MXN',
         },
-         'nota': 'Promoción 2x1 en cena Vegetariana, Pollo a la parrilla y Corte New York', 
+        'nota':
+            'Promoción 2x1 en cena Vegetariana, Pollo a la parrilla y Corte New York',
         'detalles':
             'Combinando la historia de la piratería con el lujo y tecnología moderna, nuestros Galeones están equipados con un sistema de audio, luz y video de última generación para un show nocturno espectacular en la cubierta principal. \n\nLa zona VIP ofrece vistas excelentes y atención personalizada, mientras que para cenar disponemos de salones climatizados temáticos.',
         'closingTime': '3 A.M.',
@@ -562,7 +550,7 @@ class BestNatureList extends StatelessWidget {
           },
         ],
       },
-      
+
       // Añade más lugares relacionados con autobuses aquí...
     ],
     // ... más categorías
@@ -578,7 +566,7 @@ class BestNatureList extends StatelessWidget {
       filteredSpots = natureSpots;
     } else {
       // Filtrar por la subcategoría específica
-    ///  filteredSpots = natureSpots.where((spot) {
+      ///  filteredSpots = natureSpots.where((spot) {
       //  return spot['subcategory'] == subcategoryFilter;
       //}).toList();
     }
@@ -600,7 +588,6 @@ class BestNatureList extends StatelessWidget {
             ), // Añade margen alrededor de la tarjeta
             child: GestureDetector(
               onTap: () => onCardTap(spot),
-
               child: Card(
                 elevation: 4.0,
                 shadowColor: Colors.grey,
@@ -659,8 +646,12 @@ class BestNatureList extends StatelessWidget {
                               Icon(Icons.attach_money,
                                   size: 18, color: Colors.orange),
                               Text(
-                                spot['precio']+" MXN",
-                                style: TextStyle(fontSize: 18,color: Colors.orange, fontStyle: FontStyle.italic,fontWeight: FontWeight.bold ),
+                                spot['precio'] + " MXN",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.orange,
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),

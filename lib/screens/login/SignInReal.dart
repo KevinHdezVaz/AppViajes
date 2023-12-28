@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:appviajes/screens/Onboarding/SignInScreen.dart';
 import 'package:appviajes/screens/login/SignUpScreen.dart';
 import 'package:appviajes/screens/menuPrincipal/MainMenu.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:appviajes/services/Api/apiRest.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class SignInReal extends StatefulWidget {
   @override
@@ -14,7 +18,7 @@ class _SignInRealState extends State<SignInReal> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
-  final _auth = FirebaseAuth.instance;
+
   bool _isLoading = false;
 
   @override
@@ -29,24 +33,28 @@ class _SignInRealState extends State<SignInReal> {
       _isLoading = true;
     });
 
-    try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
+     
+   var apiRest = ApiRest();
+    var response = await apiRest.login(
+        _emailController.text,
+        _passwordController.text
+       ); 
+      var data = json.decode(response.body);
+      var token =
+          data['access_token'];  
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+
+      print("Token received: $token");
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainMenu()),
       );
-      if (userCredential.user != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainMenu()),
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      // Manejo de errores
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -105,13 +113,14 @@ class _SignInRealState extends State<SignInReal> {
                           borderRadius: BorderRadius.circular(
                               10.0), // Esquinas redondeadas
                           borderSide: BorderSide(
-                              color: Color.fromARGB(252, 84, 0, 132) ,
+                              color: Color.fromARGB(252, 84, 0, 132),
                               width: 2.0), // Color y grosor del borde
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(252, 84, 0, 132),
+                              width: 2.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -134,13 +143,14 @@ class _SignInRealState extends State<SignInReal> {
                           borderRadius: BorderRadius.circular(
                               10.0), // Esquinas redondeadas
                           borderSide: BorderSide(
-                              color: Color.fromARGB(252, 84, 0, 132) ,
+                              color: Color.fromARGB(252, 84, 0, 132),
                               width: 2.0), // Color y grosor del borde
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(252, 84, 0, 132),
+                              width: 2.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -172,7 +182,7 @@ class _SignInRealState extends State<SignInReal> {
                       },
                       child: Text('INICIAR SESION'),
                       style: ElevatedButton.styleFrom(
-                          primary: Color.fromARGB(252, 84, 0, 132) ,
+                          primary: Color.fromARGB(252, 84, 0, 132),
                           foregroundColor: Colors.white,
                           minimumSize: Size(double.infinity, 50)),
                     ),
@@ -197,7 +207,8 @@ class _SignInRealState extends State<SignInReal> {
                             );
                           },
                           child: Text('Registrarse',
-                              style: TextStyle(color: Color.fromARGB(252, 84, 0, 132) )),
+                              style: TextStyle(
+                                  color: Color.fromARGB(252, 84, 0, 132))),
                         ),
                       ],
                     ),
@@ -207,23 +218,24 @@ class _SignInRealState extends State<SignInReal> {
             ),
           ),
         ),
-         if (_isLoading) ...[
-        const Opacity(
-            opacity: 0.5,
-            child: ModalBarrier(dismissible: false, color: Colors.grey)),
-        const Center(
-          child: SizedBox(
-            width: 60, // El ancho del CircularProgressIndicator
-            height: 60, // El alto del CircularProgressIndicator
-            child: CircularProgressIndicator(
-              strokeWidth: 3, // El grosor del indicador de progreso
-              valueColor: AlwaysStoppedAnimation<Color>(
-                Color.fromARGB(252, 84, 0, 132) , // Color del indicador de progreso
+        if (_isLoading) ...[
+          const Opacity(
+              opacity: 0.5,
+              child: ModalBarrier(dismissible: false, color: Colors.grey)),
+          const Center(
+            child: SizedBox(
+              width: 60, // El ancho del CircularProgressIndicator
+              height: 60, // El alto del CircularProgressIndicator
+              child: CircularProgressIndicator(
+                strokeWidth: 3, // El grosor del indicador de progreso
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Color.fromARGB(
+                      252, 84, 0, 132), // Color del indicador de progreso
+                ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
       ],
     );
   }

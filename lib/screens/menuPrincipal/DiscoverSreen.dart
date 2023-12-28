@@ -1,6 +1,9 @@
 import 'package:appviajes/screens/details/PlaceDetailsScreen.dart';
+import 'package:appviajes/screens/profile/Historial.dart';
+import 'package:appviajes/services/Api/apiRest.dart';
 import 'package:flutter/material.dart';
 import 'package:particles_flutter/particles_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'BestNatureList.dart';
 
 class DiscoverScreen extends StatefulWidget {
@@ -11,7 +14,8 @@ class DiscoverScreen extends StatefulWidget {
 class _DiscoverScreenState extends State<DiscoverScreen> {
   int _selectedCategoryIndex = 0;
   String _selectedSubcategory = 'Most viewed';
-
+  String userName = "Cargando..."; // Un valor predeterminado
+   var apiRest = ApiRest();
   final List<Map<String, dynamic>> categories = [
     {'icon': Icons.explore, 'text': 'Antros'},
     {'icon': Icons.waves, 'text': 'Acuático'},
@@ -28,6 +32,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       _selectedCategoryIndex = index;
       _selectedSubcategory = 'Most viewed';
     });
+  }
+  @override
+  void initState() {
+    super.initState();
+    
   }
 
   void _onSubcategorySelected(String subcategory) {
@@ -60,7 +69,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Row(
+        title:   Row(
           children: [
             CircleAvatar(
               child: Icon(
@@ -70,32 +79,21 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               ),
             ),
             SizedBox(width: 10), // Espacio entre el avatar y el texto.
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize
-                  .min, // Para que la columna solo ocupe el espacio de sus hijos.
-              children: [
-                Text(
-                  'Hola',
-                  style: TextStyle(
-                      fontSize:
-                          18), // Ajusta el tamaño de fuente según tu diseño.
-                ),
-                Text(
-                  'Bienvenido de nuevo!',
-                  style: TextStyle(
-                      fontSize:
-                          12), // Ajusta el tamaño de fuente según tu diseño.
-                ),
-              ],
-            ),
+      
+
+
+
           ],
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              // Acción al presionar el ícono de configuraciones
+
+ Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Historial()),
+        );
             },
           ),
         ],
@@ -259,4 +257,5 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       ),
     );
   }
+    
 }

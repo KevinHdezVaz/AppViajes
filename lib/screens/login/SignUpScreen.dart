@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:appviajes/screens/Onboarding/SignInScreen.dart';
 import 'package:appviajes/screens/login/SignInReal.dart';
- import 'package:firebase_auth/firebase_auth.dart';
+import 'package:appviajes/services/Api/apiRest.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../menuPrincipal/MainMenu.dart';
 
@@ -28,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-        _nameController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
@@ -38,20 +42,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _register() async {
-     final String nombre = _nameController.text.trim();
+    final String nombre = _nameController.text.trim();
     final String email = _emailController.text.trim();
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
 
     if (!_isEmailValid(email)) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Please enter a valid email address.")));
+          SnackBar(content: Text("Porfavor introduce un email válido.")));
       return;
     }
- 
+
     if (password != confirmPassword) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Passwords do not match.")));
+          .showSnackBar(SnackBar(content: Text("Contraseñas no coinciden, intenta de nuevo.")));
       return;
     }
     setState(() {
@@ -64,10 +68,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: email,
         password: password,
       );
- 
 
       if (userCredential.user != null) {
-         
+
+
+   
+      
+    var apiRest = ApiRest();
+    var response = await apiRest.register(
+        _nameController.text,
+        _emailController.text,
+        _passwordController.text,
+        _confirmPasswordController.text); 
+        
+  // Después del registro o inicio de sesión exitoso
+SharedPreferences prefs = await SharedPreferences.getInstance();
+await prefs.setString('userName', _nameController.text); // Guardar el nombre del usuario
+
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MainMenu()),
@@ -136,25 +154,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(height: 32),
                   TextField(
-                      controller: _nameController,
+                    controller: _nameController,
                     decoration: InputDecoration(
                       labelText: 'Nombre',
                       border: OutlineInputBorder(
                         borderRadius:
                             BorderRadius.circular(10.0), // Bordes redondeados
                         borderSide: BorderSide(
-                            color: Color.fromARGB(252, 84, 0, 132) ), // Color del contorno
+                            color: Color.fromARGB(
+                                252, 84, 0, 132)), // Color del contorno
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                            color: Color.fromARGB(252, 84, 0, 132) ,
+                            color: Color.fromARGB(252, 84, 0, 132),
                             width: 2), // Contorno más grueso al enfocar
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
-                            color: Color.fromARGB(252, 84, 0, 132) , width: 1), // Contorno normal
+                            color: Color.fromARGB(252, 84, 0, 132),
+                            width: 1), // Contorno normal
                       ),
                     ),
                     keyboardType: TextInputType.name,
@@ -170,13 +190,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         borderRadius:
                             BorderRadius.circular(10.0), // Esquinas redondeadas
                         borderSide: BorderSide(
-                            color: Color.fromARGB(252, 84, 0, 132) ,
+                            color: Color.fromARGB(252, 84, 0, 132),
                             width: 2.0), // Color y grosor del borde
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
+                        borderSide: BorderSide(
+                            color: Color.fromARGB(252, 84, 0, 132), width: 2.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -199,13 +219,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       labelText: 'Contraseña',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
+                        borderSide: BorderSide(
+                            color: Color.fromARGB(252, 84, 0, 132), width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
+                        borderSide: BorderSide(
+                            color: Color.fromARGB(252, 84, 0, 132), width: 2.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -236,13 +256,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       labelText: 'Confirmar Contraseña',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
+                        borderSide: BorderSide(
+                            color: Color.fromARGB(252, 84, 0, 132), width: 2.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                            BorderSide(color: Color.fromARGB(252, 84, 0, 132) , width: 2.0),
+                        borderSide: BorderSide(
+                            color: Color.fromARGB(252, 84, 0, 132), width: 2.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -268,11 +288,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () {
-                      _register();
+                       _register();
+ 
                     },
                     child: Text("ENTRAR"),
                     style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(252, 84, 0, 132) ,
+                        primary: Color.fromARGB(252, 84, 0, 132),
                         foregroundColor: Colors.white,
                         minimumSize: Size(double.infinity, 50)),
                   ),
@@ -290,7 +311,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           );
                         },
                         child: Text('INICIAR SESION',
-                            style: TextStyle(color: Color.fromARGB(252, 84, 0, 132) )),
+                            style: TextStyle(
+                                color: Color.fromARGB(252, 84, 0, 132))),
                       ),
                     ],
                   ),
@@ -311,7 +333,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: CircularProgressIndicator(
               strokeWidth: 3, // El grosor del indicador de progreso
               valueColor: AlwaysStoppedAnimation<Color>(
-                Color.fromARGB(252, 84, 0, 132) , // Color del indicador de progreso
+                Color.fromARGB(
+                    252, 84, 0, 132), // Color del indicador de progreso
               ),
             ),
           ),
@@ -319,4 +342,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ],
     ]);
   }
+ 
 }

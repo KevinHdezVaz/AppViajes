@@ -1,6 +1,7 @@
 import 'package:appviajes/screens/Onboarding/SignInScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -31,18 +32,25 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
           ),
-          Center(
-            child: Text(
-              'Clifton Radden',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Center(
-            child: Text(
-              'UI/UX Designer',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ),
+       
+
+           Center(
+             child: FutureBuilder(
+               future: SharedPreferences.getInstance(),
+               builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
+                 if (snapshot.hasData) {
+                   String userName = snapshot.data!.getString('userName') ?? "Usuario";
+                   return Text(
+                      userName,
+                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                   );
+                 } else {
+                   return CircularProgressIndicator(); // Mientras se cargan los SharedPreferences
+                 }
+               },
+             ),
+           ),
+          
          _buildCustomListTile(
             leadingIcon: Icons.edit,
             title: 'Edit Profile',

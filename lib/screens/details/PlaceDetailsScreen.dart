@@ -1,4 +1,4 @@
-import 'dart:async'; 
+import 'dart:async';
 import 'package:appviajes/screens/details/ConfirmationScreen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +12,8 @@ class PlaceDetailsScreen extends StatefulWidget {
   final String location;
   final Map<String, dynamic> prices;
   final List<String> imageUrls;
- 
-    final Map<String, dynamic> costExtra;
+
+  final Map<String, dynamic> costExtra;
 
   final String duration;
   final String detalles;
@@ -374,9 +374,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                           style: TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold)),
 
-                      Text(widget.nota,
-                          style: TextStyle(
-                              fontSize: 16)),
+                      Text(widget.nota, style: TextStyle(fontSize: 16)),
                       SizedBox(height: 26),
                       Card(
                         elevation:
@@ -393,18 +391,17 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                            Card(
-  child: Column(
-    children: widget.costExtra.entries.map((entry) {
-      return ListTile(
-        title: Text(entry.key),
-        subtitle: Text(entry.value.toString()),
-      );
-    }).toList(),
-  ),
-)
-
-
+                              Card(
+                                child: Column(
+                                  children:
+                                      widget.costExtra.entries.map((entry) {
+                                    return ListTile(
+                                      title: Text(entry.key),
+                                      subtitle: Text(entry.value.toString()),
+                                    );
+                                  }).toList(),
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -415,7 +412,23 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
                           child: ElevatedButton(
-                            onPressed: () {},
+                           onPressed: () {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ConfirmationScreen(
+          placeDetails: {
+            'title': widget.title,
+            'location': widget.location,
+             
+          },
+          packages: widget.packages,
+          prices: widget.prices,
+          costExtra: widget.costExtra,
+         
+        ),
+      ),
+    );
+  },
                             child: Text(
                               'Reservar ahora',
                               style: TextStyle(
