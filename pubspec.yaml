@@ -29,6 +29,7 @@ dependencies:
   photo_view: ^0.14.0
   google_maps_flutter: ^2.0.6
   intl: ^0.17.0  
+  dotted_border: ^2.0.0+1 # Asegúrate de usar la versión más reciente
 
 dev_dependencies:
   flutter_test:
