@@ -1,3 +1,4 @@
+import 'package:appviajes/models/SpotData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -23,6 +24,12 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
   DateTime selectedDate = DateTime.now();
   double total = 0.0;
   bool isDateSelected = false;
+  String? selectedHotel; // Variable para almacenar el hotel seleccionado
+String searchQuery = ""; 
+List<Map<String, dynamic>> filteredHotels = [];
+
+
+  final List<Map<String, dynamic>> hotels =  SpotData.listaHoteles["Hotel"] ?? [];
 
   @override
   void initState() {
@@ -35,7 +42,23 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
         }
       });
     });
+      filteredHotels = hotels;
+ 
   }
+
+ 
+
+
+void _filterHotels(String query) {
+  List<Map<String, dynamic>> updatedList = hotels.where((hotel) {
+    return hotel['title'].toLowerCase().contains(query.toLowerCase());
+  }).toList();
+
+  setState(() {
+    searchQuery = query;
+    filteredHotels = updatedList;
+  });
+}
 
   void _calculateTotal() {
     if (selectedPackage == null || !isDateSelected) {
@@ -74,6 +97,65 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
       }
     }
   }
+Future<void> _showHotelSelectionModal(BuildContext context) async {
+  String? selectedHotelTemp = selectedHotel;
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Buscar hotel',
+                  suffixIcon: Icon(Icons.search),
+                ),
+                onChanged: _filterHotels,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: filteredHotels.length,
+                itemBuilder: (BuildContext context, int index) {
+  if (index < filteredHotels.length) {
+    return ListTile(
+      title: Text(filteredHotels[index]['title']),
+      onTap: () {
+        setState(() {
+          selectedHotelTemp = filteredHotels[index]['title'];
+        });
+        Navigator.of(context).pop();
+      },
+    );
+  } else {
+    // Manejo de índice fuera de rango
+    return SizedBox();
+  }
+},
+
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+
+  if (selectedHotelTemp != null) {
+    setState(() {
+      selectedHotel = selectedHotelTemp;
+    });
+  }
+}
+
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -100,91 +182,94 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            AnimationLimiter(
-              child: Column(
-                children: [
+        child: AnimationLimiter(
+          child: Column(
+            children: AnimationConfiguration.toStaggeredList(
+              duration: const Duration(milliseconds: 1375),
+              childAnimationBuilder: (widget) => SlideAnimation(
+                verticalOffset: 44.0,
+                child: FadeInAnimation(
+                  child: widget,
+                ),
+              ),
+              children: [
                 Card(
-                  child: AnimationConfiguration.staggeredList(
-                    position:
-                        0, // Esta posición es 0 ya que es un único elemento
-                    duration: const Duration(milliseconds: 2375),
-                    child: SlideAnimation(
-                      verticalOffset:
-                          50.0, // Ajusta el offset vertical si es necesario
-                      child: FadeInAnimation(
-                        child: ListTile(
-                          title: Text(isDateSelected
-                              ? 'Fecha seleccionada: ${DateFormat('yyyy-MM-dd').format(selectedDate)}'
-                              : 'Selecciona una fecha'),
-                          trailing: Icon(Icons.calendar_today),
-                          onTap: () => _selectDate(context),
-                        ),
-                      ),
+                  child: ListTile(
+                    title: Text(isDateSelected
+                        ? 'Fecha seleccionada: ${DateFormat('yyyy-MM-dd').format(selectedDate)}'
+                        : 'Selecciona una fecha'),
+                    trailing: Icon(Icons.calendar_today),
+                    onTap: () => _selectDate(context),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    title: Text('Número de Pasajeros'),
+                    trailing: DropdownButton<int>(
+                      value: numberOfPassengers,
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          numberOfPassengers = newValue ?? 1;
+                          _calculateTotal();
+                        });
+                      },
+                      items: List.generate(10, (index) => index + 1)
+                          .map<DropdownMenuItem<int>>((int value) {
+                        return DropdownMenuItem<int>(
+                          value: value,
+                          child: Text(value.toString()),
+                        );
+                      }).toList(),
                     ),
                   ),
                 ),
-              ]),
-            ),
-            Card(
-              child: ListTile(
-                title: Text('Número de Pasajeros'),
-                trailing: DropdownButton<int>(
-                  value: numberOfPassengers,
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      numberOfPassengers = newValue ?? 1;
-                      _calculateTotal();
-                    });
-                  },
-                  items: List.generate(10, (index) => index + 1)
-                      .map<DropdownMenuItem<int>>((int value) {
-                    return DropdownMenuItem<int>(
-                      value: value,
-                      child: Text(value.toString()),
-                    );
-                  }).toList(),
+                Card(
+                  child: ListTile(
+                    title: Text('Seleccionar Paquete'),
+                    trailing: DropdownButton<String>(
+                      value: selectedPackage,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedPackage = newValue;
+                          _calculateTotal();
+                        });
+                      },
+                      items: widget.packages
+                          .map<DropdownMenuItem<String>>((package) {
+                        return DropdownMenuItem<String>(
+                          value: package['name'],
+                          child: Text(package['name']),
+                        );
+                      }).toList(),
+                      hint: selectedPackage == null
+                          ? Text('Seleccione un paquete')
+                          : null,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                title: Text('Seleccionar Paquete'),
-                trailing: DropdownButton<String>(
-                  value: selectedPackage,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedPackage = newValue;
-                      _calculateTotal();
-                    });
-                  },
-                  items:
-                      widget.packages.map<DropdownMenuItem<String>>((package) {
-                    return DropdownMenuItem<String>(
-                      value: package['name'],
-                      child: Text(package['name']),
-                    );
-                  }).toList(),
-                  hint: selectedPackage == null
-                      ? Text('Seleccione un paquete')
-                      : null,
+           // Reemplaza este Card por el botón de selección de hotel
+_buildHotelSelectionButton(context),
+
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text('Total: \$${total.toStringAsFixed(2)} MXN'),
                 ),
-              ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Implementar lógica para guardar la reserva
+                  },
+                  child: Text('Confirmar Reserva'),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text('Total: \$${total.toStringAsFixed(2)} MXN'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Implementar lógica para guardar la reserva
-              },
-              child: Text('Confirmar Reserva'),
-            ),
-          ],
+          ),
         ),
       ),
     );
-  }
+  }Widget _buildHotelSelectionButton(BuildContext context) {
+  return ElevatedButton(
+    onPressed: () => _showHotelSelectionModal(context),
+    child: Text(selectedHotel ?? 'Seleccionar Hotel'),
+  );
+}
 }
