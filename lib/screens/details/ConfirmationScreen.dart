@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 class ConfirmationScreen extends StatefulWidget {
-  final Map<String, dynamic> placeDetails;
+  final String title;
   final List<Map<String, dynamic>> packages;
-  final Map<String, dynamic> prices;
-  final Map<String, dynamic> costExtra;
 
   ConfirmationScreen({
     Key? key,
-    required this.placeDetails,
+    required this.title,
     required this.packages,
-    required this.prices,
-    required this.costExtra,
   }) : super(key: key);
 
   @override
@@ -21,23 +19,60 @@ class ConfirmationScreen extends StatefulWidget {
 
 class _ConfirmationScreenState extends State<ConfirmationScreen> {
   int numberOfPassengers = 1;
-  String selectedPackage = '';
-  Map<String, dynamic> selectedExtraCosts = {};
-  // Controladores para los nuevos campos de texto
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _companionsController = TextEditingController();
-  late DateTime selectedDate;
-  bool isDateSelected =
-      false; // Añadir un flag para rastrear si la fecha ha sido seleccionada
-  // ... resto de tus variables de estado
+  String? selectedPackage; // Hazlo nullable
+  DateTime selectedDate = DateTime.now();
+  double total = 0.0;
+  bool isDateSelected = false;
 
   @override
   void initState() {
     super.initState();
-    selectedDate = DateTime.now(); // Fecha predeterminada
-    selectedPackage = widget.packages.isNotEmpty
-        ? widget.packages[0]['name']
-        : ''; // Paquete predeterminado
+    initializeDateFormatting('es_ES', null).then((_) {
+      setState(() {
+        if (widget.packages.isNotEmpty) {
+          selectedPackage = widget.packages[0]['name'];
+          _calculateTotal();
+        }
+      });
+    });
+  }
+
+  void _calculateTotal() {
+    if (selectedPackage == null || !isDateSelected) {
+      setState(() {
+        total = 0.0;
+      });
+    } else {
+      var package = widget.packages.firstWhere(
+        (p) => p['name'] == selectedPackage,
+        orElse: () => <String, Object>{},
+      );
+
+      if (package.isEmpty || !package.containsKey('prices')) {
+        setState(() {
+          total = 0.0;
+        });
+      } else {
+        String dayOfWeek = DateFormat('EEEE', 'es_ES').format(selectedDate);
+        // Capitalizar la primera letra del día de la semana para que coincida con el JSON
+        dayOfWeek = '${dayOfWeek[0].toUpperCase()}${dayOfWeek.substring(1)}';
+        var prices = package['prices'] as Map<String, dynamic>;
+        var priceString = prices[dayOfWeek];
+
+        if (priceString != null) {
+          double priceForDay =
+              double.tryParse(priceString.toString().replaceAll(',', '')) ??
+                  0.0;
+          setState(() {
+            total = priceForDay * numberOfPassengers;
+          });
+        } else {
+          setState(() {
+            total = 0.0;
+          });
+        }
+      }
+    }
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -47,11 +82,13 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2025),
     );
+
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        isDateSelected =
-            true; // Actualizar el flag cuando se selecciona una fecha
+        isDateSelected = true;
+        _calculateTotal();
+        print(selectedPackage);
       });
     }
   }
@@ -60,33 +97,48 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Confirmar Reserva"),
+        title: Text(widget.title),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ListTile(
-              title: Text(
-                isDateSelected
-                    ? "Fecha del Viaje: ${DateFormat('dd/MM/yyyy').format(selectedDate)}"
-                    : "Elige tu fecha del viaje", // Mostrar este texto si la fecha no ha sido seleccionada
-              ),
-              trailing: Icon(Icons.calendar_today),
-              onTap: () => _selectDate(context),
+            AnimationLimiter(
+              child: Column(
+                children: [
+                Card(
+                  child: AnimationConfiguration.staggeredList(
+                    position:
+                        0, // Esta posición es 0 ya que es un único elemento
+                    duration: const Duration(milliseconds: 2375),
+                    child: SlideAnimation(
+                      verticalOffset:
+                          50.0, // Ajusta el offset vertical si es necesario
+                      child: FadeInAnimation(
+                        child: ListTile(
+                          title: Text(isDateSelected
+                              ? 'Fecha seleccionada: ${DateFormat('yyyy-MM-dd').format(selectedDate)}'
+                              : 'Selecciona una fecha'),
+                          trailing: Icon(Icons.calendar_today),
+                          onTap: () => _selectDate(context),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ]),
             ),
-
-            Divider(),
             Card(
               child: ListTile(
-                title: Text("Número de Pasajeros"),
-                subtitle: DropdownButton<int>(
+                title: Text('Número de Pasajeros'),
+                trailing: DropdownButton<int>(
                   value: numberOfPassengers,
                   onChanged: (int? newValue) {
                     setState(() {
-                      numberOfPassengers = newValue!;
+                      numberOfPassengers = newValue ?? 1;
+                      _calculateTotal();
                     });
                   },
-                  items: <int>[1, 2, 3, 4, 5]
+                  items: List.generate(10, (index) => index + 1)
                       .map<DropdownMenuItem<int>>((int value) {
                     return DropdownMenuItem<int>(
                       value: value,
@@ -96,104 +148,43 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
                 ),
               ),
             ),
-            // Campo de texto para el nombre completo
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Nombre Completo',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor ingresa tu nombre completo';
-                  }
-                  return null;
-                },
-              ),
-            ),
-
-         
-
-            Divider(),
-
             Card(
               child: ListTile(
-                title: Text("Seleccionar Paquete"),
-                trailing: IconButton(
-                  icon: Icon(Icons.help_outline),
-                  onPressed: () {
-                    _showPackageDetails(context);
-                  },
-                ),
-                subtitle: DropdownButton<String>(
+                title: Text('Seleccionar Paquete'),
+                trailing: DropdownButton<String>(
                   value: selectedPackage,
                   onChanged: (String? newValue) {
                     setState(() {
-                      selectedPackage = newValue!;
+                      selectedPackage = newValue;
+                      _calculateTotal();
                     });
                   },
-                  items: widget.packages.map<DropdownMenuItem<String>>(
-                      (Map<String, dynamic> package) {
+                  items:
+                      widget.packages.map<DropdownMenuItem<String>>((package) {
                     return DropdownMenuItem<String>(
                       value: package['name'],
                       child: Text(package['name']),
                     );
                   }).toList(),
+                  hint: selectedPackage == null
+                      ? Text('Seleccione un paquete')
+                      : null,
                 ),
               ),
             ),
-
-            Divider(),
-            // Aquí puedes agregar una lógica similar para seleccionar costos extras
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Lógica para enviar la reserva
-                },
-                child: Text('Enviar Reserva'),
-              ),
+              child: Text('Total: \$${total.toStringAsFixed(2)} MXN'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Implementar lógica para guardar la reserva
+              },
+              child: Text('Confirmar Reserva'),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  void _showPackageDetails(BuildContext context) {
-    // Encuentra los precios del paquete seleccionado
-    var packagePrices = widget.prices[selectedPackage];
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Detalles de Precios - $selectedPackage"),
-          content: SingleChildScrollView(
-            child: packagePrices != null
-                ? Column(
-                    children: packagePrices.entries.map<Widget>((entry) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('${entry.key}: ${entry.value}'),
-                      );
-                    }).toList(),
-                  )
-                : Text(
-                    "No hay detalles de precios disponibles para este paquete."),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Cerrar"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

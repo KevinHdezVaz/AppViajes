@@ -31,28 +31,6 @@ class BestNatureList extends StatelessWidget {
             'La disco más popular de México con proyecciones en pantallas gigantes y shows de acróbatas impactantes.\n\nUbicado justo en el corazón de la Zona Hotelera, Coco Bongo Cancún destaca entre decenas de bares y discotecas que forman la capital de la fiesta en México.\n\nA tan sólo una calle del majestuoso Mar Caribe, emerge un coloso espectacular indicando a los viajeros la llegada a la noche más impactante de sus vidas.',
         'closingTime': '3 A.M.',
         'transportation': 'Transportación a partir de 10 pax',
-        'prices': {
-          'Regular': {
-            'Lunes a Miércoles': '1,462 ',
-            'Jueves a Domingo': '1,921 '
-          },
-          'Premium': {
-            'Lunes a Miércoles': '2,040 ',
-            'Jueves a Domingo': '2,414 '
-          },
-          'Gold Member': {
-            'Domingo a Jueves': '2,635 ',
-            'Viernes y Sábado': '2,805 '
-          },
-          'Front Row': {
-            'Domingo a Jueves': '3,094 ',
-            'Viernes y Sábado': '3,400 '
-          },
-          'Royal Service': {
-            'Domingo a Jueves': '2,890 ',
-            'Viernes y Sábado': '3,060 '
-          }
-        },
         'images': [
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/124763274_10157208842885518_7433031921927152722_n.webp?alt=media&token=4ee1cdba-f16c-4040-8cbb-5d6ec5462ed7',
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/104886997_10156896177275518_2090329408425446882_n.webp?alt=media&token=17ddb785-b84c-4d9c-9ed4-6577b80af3bf',
@@ -71,11 +49,29 @@ class BestNatureList extends StatelessWidget {
         'packages': [
           {
             'name': 'Regular',
-            'details': ['Acceso regular', 'Barra libre nacional', 'Shows']
+            'details': ['Acceso regular', 'Barra libre nacional', 'Shows'],
+            "prices": {
+              "Domingo": "1921",
+              "Lunes": "1462",
+              "Martes": "1462",
+              "Miércoles": "1462",
+              "Jueves": "1921",
+              "Viernes": "1921",
+              "Sábado": "1921"
+            }
           },
           {
             'name': 'Premium',
-            'details': ['Acceso regular', 'Barra libre premium', 'Shows']
+            'details': ['Acceso regular', 'Barra libre premium', 'Shows'],
+            "prices": {
+              "Domingo": "2414",
+              "Lunes": "2040",
+              "Martes": "2040",
+              "Miércoles": "2040",
+              "Jueves": "2414",
+              "Viernes": "2414",
+              "Sábado": "2414"
+            }
           },
           {
             'name': 'Gold Member',
@@ -86,7 +82,16 @@ class BestNatureList extends StatelessWidget {
               'Asiento (se asigna a la llegada)',
               'Servicio de mesero',
               "Show's"
-            ]
+            ],
+            "prices": {
+              "Domingo": "2635",
+              "Lunes": "2635",
+              "Martes": "2635",
+              "Miércoles": "2635",
+              "Jueves": "2635",
+              "Viernes": "2805",
+              "Sábado": "2805"
+            }
           },
           {
             'name': 'Front Row',
@@ -97,7 +102,16 @@ class BestNatureList extends StatelessWidget {
               'Asiento (reservado)',
               'Servicio de mesero',
               "Show's"
-            ]
+            ],
+            "prices": {
+              "Domingo": "3094",
+              "Lunes": "3094",
+              "Martes": "3094",
+              "Miércoles": "3094",
+              "Jueves": "3094",
+              "Viernes": "3400",
+              "Sábado": "3400"
+            }
           },
           {
             'name': 'Royal Service',
@@ -107,7 +121,16 @@ class BestNatureList extends StatelessWidget {
               'Mesa',
               'Servicio de mesero',
               "Show's"
-            ]
+            ],
+            "prices": {
+              "Domingo": "2890",
+              "Lunes": "2890",
+              "Martes": "2890",
+              "Miércoles": "2890",
+              "Jueves": "2890",
+              "Viernes": "3060",
+              "Sábado": "3060"
+            }
           },
         ],
       },
@@ -127,15 +150,6 @@ class BestNatureList extends StatelessWidget {
         'detalles':
             'Durante tu estancia en Cancún debes visitar Coco Bongo Beach Party, ¡la mejor experiencia en Beach Party con una impresionante vista al mar Caribe! ¡Ninguna otra fiesta será suficiente después de vivir esta emocionante experiencia!\n\nVen y descubre el más imponente Beach Party hecho en México que emerge frente a las aguas cristalinas del majestuoso Mar Caribe y su arena blanca, dando vida a una fiesta interminable de sol, colores y ritmos frescos que robarán el aliento de todos.\n\nEntretenimiento de alto impacto, un mega desfile de tecnología, acrobacias y números nunca antes vistos en una escenario de este tipo te estarán esperando. ¡Conoce una nueva experiencia de entretenimiento en Latinoamérica!',
         'transportation': 'Transportación a partir de 10 pax',
-        'prices': {
-          'Todos los dias': {
-            'Ladies': '595 ',
-            'Regular': '935 ',
-            'Premium': '1,445  ',
-            'Celebrity': '2,040 ',
-            'Bottle Pack': '4,080  ',
-          },
-        },
         'images': [
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/Coco%20Bongo%20Beach.webp?alt=media&token=1eb3dac4-431d-4409-8558-af8834ed6dd4',
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/274479936_296912162507169_1862556493175755358_n.webp?alt=media&token=77e07f0b-5164-43fa-90de-f06a6e34f752',
@@ -150,11 +164,29 @@ class BestNatureList extends StatelessWidget {
         'packages': [
           {
             'name': 'Ladies',
-            'details': ['Acceso', 'Barra libre nacional']
+            'details': ['Acceso', 'Barra libre nacional'],
+            "prices": {
+              "Lunes": "595",
+              "Martes": "595",
+              "Miércoles": "595",
+              "Jueves": "595",
+              "Viernes": "595",
+              "Sábado": "595",
+              "Domingo": "595"
+            }
           },
           {
             'name': 'Regular',
-            'details': ['Acceso', 'Barra libre']
+            'details': ['Acceso', 'Barra libre'],
+            "prices": {
+              "Lunes": "935",
+              "Martes": "935",
+              "Miércoles": "935",
+              "Jueves": "935",
+              "Viernes": "935",
+              "Sábado": "935",
+              "Domingo": "935"
+            }
           },
           {
             'name': 'Premium',
@@ -162,7 +194,16 @@ class BestNatureList extends StatelessWidget {
               'Acceso',
               'Barra libre Premium',
               "Snack's ilimitados",
-            ]
+            ],
+            "prices": {
+              "Lunes": "1445",
+              "Martes": "1445",
+              "Miércoles": "1445",
+              "Jueves": "1445",
+              "Viernes": "1445",
+              "Sábado": "1445",
+              "Domingo": "1445"
+            }
           },
           {
             'name': 'Celebrity',
@@ -172,7 +213,16 @@ class BestNatureList extends StatelessWidget {
               'Barra libre Premium',
               'Platillo de snacks p/p',
               'Toalla y locker',
-            ]
+            ],
+            "prices": {
+              "Lunes": "2040",
+              "Martes": "2040",
+              "Miércoles": "2040",
+              "Jueves": "2040",
+              "Viernes": "2040",
+              "Sábado": "2040",
+              "Domingo": "2040"
+            }
           },
           {
             'name': 'Bottle Pack',
@@ -181,7 +231,16 @@ class BestNatureList extends StatelessWidget {
               'Botella del menú',
               '5 refrescos ó 2 jarras de jugo',
               'Mesa',
-            ]
+            ],
+            "prices": {
+              "Lunes": "4080",
+              "Martes": "4080",
+              "Miércoles": "4080",
+              "Jueves": "4080",
+              "Viernes": "4080",
+              "Sábado": "4080",
+              "Domingo": "4080"
+            }
           },
         ],
       },
@@ -201,11 +260,6 @@ class BestNatureList extends StatelessWidget {
         'detalles':
             '¡Prepárate para disfrutar de una de las mejores noches de tu vida! Congo Bar se ha convertido en el favorito de locales y turistas en su visita a Cancún. \n\nTe sorprenderás con los espectáculos especiales que tenemos para ti con las Congo Girls y nuestros increíbles acróbatas, ¡así que prepara tu celular para tomar muchas fotos y videos! Nuestro dj te hará bailar y te invita a unirte a la conga con todos nuestros visitantes. ¿Estás listo?.',
         'transportation': 'Transportación a partir de 10 pax',
-        'prices': {
-          'Todos los dias': {
-            'Regular': '800',
-          },
-        },
         'images': [
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/133765771_1344513839232959_4806847838900149772_n.jpg?alt=media&token=4452d218-3a83-40fa-a462-ed536cec681a',
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/270038798_1051842945636699_8946132292583942847_n.jpg?alt=media&token=89867023-66cd-421c-a6c7-9025cdd63f9f',
@@ -219,7 +273,16 @@ class BestNatureList extends StatelessWidget {
         'packages': [
           {
             'name': 'Regular',
-            'details': ['Acceso', 'Barra libre nacional']
+            'details': ['Acceso', 'Barra libre nacional'],
+            "prices": {
+              "Lunes": "800",
+              "Martes": "800",
+              "Miércoles": "800",
+              "Jueves": "800",
+              "Viernes": "800",
+              "Sábado": "800",
+              "Domingo": "800"
+            }
           },
         ],
       },
@@ -241,12 +304,6 @@ class BestNatureList extends StatelessWidget {
             'Vive la adrenalina de manejar tu propio bote rápido hasta mar abierto donde realizarás snorkel y podrás observar la vida marina.',
         'closingTime': '3 A.M.',
         'transportation': 'Transportación a partir de 10 pax',
-        'prices': {
-          'Todos los dias': {
-            'Jungle Tour Express': '800',
-            'Jungle Tour Snorkel': '900'
-          },
-        },
         'images': [
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/52695076_2370076813024715_3573757770635149312_n.webp?alt=media&token=bfb5d082-1ff9-457a-9b5e-1a6f45fc476a',
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/45216609_2196873137011751_991465884289597440_n.webp?alt=media&token=d59830d7-a695-46db-a89a-5f4bcb61b516',
@@ -259,6 +316,25 @@ class BestNatureList extends StatelessWidget {
         'subcategory': 'Most viewed',
         'packages': [
           {
+            'name': 'Jungle Tour Express',
+            'details': [
+              'Guía bilingüe (español-inglés)',
+              'Bote rápido (2-4 pax)',
+              'Paseo en laguna Nichupte',
+              'Snorkel en arrecife',
+              'Botella de agua'
+            ],
+            "prices": {
+              "Lunes": "800",
+              "Martes": "800",
+              "Miércoles": "800",
+              "Jueves": "800",
+              "Viernes": "800",
+              "Sábado": "800",
+              "Domingo": "800"
+            }
+          },
+          {
             'name': 'Jungle Tour Snorkel',
             'details': [
               'Guía bilingüe (español-inglés)',
@@ -266,7 +342,16 @@ class BestNatureList extends StatelessWidget {
               'Paseo en laguna Nichupte',
               'Snorkel en arrecife',
               'Botella de agua'
-            ]
+            ],
+            "prices": {
+              "Lunes": "900",
+              "Martes": "900",
+              "Miércoles": "900",
+              "Jueves": "900",
+              "Viernes": "900",
+              "Sábado": "900",
+              "Domingo": "900"
+            }
           },
         ],
       },
@@ -287,15 +372,6 @@ class BestNatureList extends StatelessWidget {
             'Diviértete a bordo del catamarán con bebidas y fiesta ilimitada junto con tu familia o amigos. Margaritas, Sex in the beach, Tequila Sunrise, Cerveza, Jugos, Refrescos, etc. \nSumérgete en mar abierto y descubre la vida submarina en el museo sub-acuático MUSA. Peces, tortugas y corales te acompañarán en tu aventura acuática. \n\nAdemás realiza una visita exprés al centro de Isla Mujeres para conocer y comprar souvenirs. Relájate en el club de playa privado donde podrás disfrutar de un delicioso bufete y las comodidades como camastros, jugar voleyball, remar en canoas, fotos para tus redes sociales, servicio de mesero y más!!! \n\nPor si fuera poco, visita una de las playas más famosas de todo México "Playa Norte". Podrás caminar y nadar con toda tranquilidad hasta 40 metros y el agua te llegará hasta el pecho. \n\n\nVive la adrenalina en el Spinnaker al elevarte y tirarte de 20 metros de altura en mar abierto.',
         'closingTime': '3 A.M.',
         'transportation': 'Transportación a partir de 10 pax',
-        'prices': {
-          'Todos los dias': {
-            'Clásico Adultos': '1,100 ',
-            'Clásico Menores': '900 '
-          },
-          'Solo Domingos': {
-            'Promo Nacionales': '900',
-          },
-        },
         'images': [
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/04%20-%20LoRes%20-%20Vista%20Cancun%20-%20Punta%20Sur-1.jpeg?alt=media&token=b539b51a-20a1-4851-b944-8fe3f2a5209b',
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/01%20LoRes%20Party%20Models%20Cancun%20Sailing.jpeg?alt=media&token=aad0a5fd-ddb6-43a0-9007-a82f1c84c8e1',
@@ -306,7 +382,7 @@ class BestNatureList extends StatelessWidget {
         'subcategory': 'Most viewed',
         'packages': [
           {
-            'name': 'Clásico y Promo Nacionales',
+            'name': 'Clásico Menores',
             'details': [
               'Traslado en catamarán (ida y vuelta)',
               'Guía bilingüe (Español-Inglés)',
@@ -316,7 +392,60 @@ class BestNatureList extends StatelessWidget {
               'Club de playa',
               'Tiempo libre en Isla Mujeres',
               'Spinnaker (si el clima lo permite)'
-            ]
+            ],
+            "prices": {
+              "Lunes": "900",
+              "Martes": "900",
+              "Miércoles": "900",
+              "Jueves": "900",
+              "Viernes": "900",
+              "Sábado": "900",
+              "Domingo": "900"
+            }
+          },
+          {
+            'name': 'Clásico Adultos',
+            'details': [
+              'Traslado en catamarán (ida y vuelta)',
+              'Guía bilingüe (Español-Inglés)',
+              'Barra libre',
+              'Buffet',
+              'Snorkel y equipo de snorkel',
+              'Club de playa',
+              'Tiempo libre en Isla Mujeres',
+              'Spinnaker (si el clima lo permite)'
+            ],
+            "prices": {
+              "Lunes": "1100",
+              "Martes": "1100",
+              "Miércoles": "1100",
+              "Jueves": "1100",
+              "Viernes": "1100",
+              "Sábado": "1100",
+              "Domingo": "1100"
+            }
+          },
+          {
+            'name': 'Promo Nacionales',
+            'details': [
+              'Traslado en catamarán (ida y vuelta)',
+              'Guía bilingüe (Español-Inglés)',
+              'Barra libre',
+              'Buffet',
+              'Snorkel y equipo de snorkel',
+              'Club de playa',
+              'Tiempo libre en Isla Mujeres',
+              'Spinnaker (si el clima lo permite)'
+            ],
+            "prices": {
+              "Lunes": "0",
+              "Martes": "0",
+              "Miércoles": "0",
+              "Jueves": "0",
+              "Viernes": "0",
+              "Sábado": "0",
+              "Domingo": "900"
+            }
           },
         ],
       },
@@ -338,17 +467,6 @@ class BestNatureList extends StatelessWidget {
         'closingTime': '3 A.M.',
         'nota': 'Hora de recogida dependerá del hotel',
         'transportation': 'Transportación a partir de 10 pax',
-        'prices': {
-          'Todos los dias': {
-            'Clásico Adultos': '1,200',
-            'Clásico Menores': '900',
-            'Deluxe Adultos': '1,600',
-            'Deluxe Menores': '1,100'
-          },
-          'Solo domingos': {
-            'Promoción Mexicanos': '900',
-          }
-        },
         'images': [
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/Fondo%207.jpg?alt=media&token=703b9906-3d9a-41d3-81bf-bb018e2106f1',
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/52f37e41-1142-490e-acff-f93a8f53b8d3.jpg?alt=media&token=3fa5a7b3-d087-41c4-acd0-e7115e24a0ac',
@@ -364,7 +482,7 @@ class BestNatureList extends StatelessWidget {
         'subcategory': 'Most viewed',
         'packages': [
           {
-            'name': 'Clásico',
+            'name': 'Clásico Menores',
             'details': [
               'Recogida en hotel',
               'Transportación redonda',
@@ -374,10 +492,19 @@ class BestNatureList extends StatelessWidget {
               'Visita guiada a la zona arqueológica',
               'Nado en cenote',
               'Tiempo para comprar artesanías'
-            ]
+            ],
+            "prices": {
+              "Lunes": "900",
+              "Martes": "900",
+              "Miércoles": "900",
+              "Jueves": "900",
+              "Viernes": "900",
+              "Sábado": "900",
+              "Domingo": "900"
+            }
           },
           {
-            'name': 'Deluxe',
+            'name': 'Deluxe Menores',
             'details': [
               'Recogida en hotel',
               'Transportación redonda',
@@ -390,7 +517,63 @@ class BestNatureList extends StatelessWidget {
               'Visita guiada a la zona arqueológica',
               'Nado en cenote',
               'Tiempo para comprar artesanías'
-            ]
+            ],
+            "prices": {
+              "Lunes": "1100",
+              "Martes": "1100",
+              "Miércoles": "1100",
+              "Jueves": "1100",
+              "Viernes": "1100",
+              "Sábado": "1100",
+              "Domingo": "1100"
+            }
+          },
+          {
+            'name': 'Clásico Adultos',
+            'details': [
+              'Recogida en hotel',
+              'Transportación redonda',
+              'Guía certificado bilingüe (español-inglés)',
+              'Buffet comida regional',
+              'Entrada a zona arqueológica',
+              'Visita guiada a la zona arqueológica',
+              'Nado en cenote',
+              'Tiempo para comprar artesanías'
+            ],
+            "prices": {
+              "Lunes": "1200",
+              "Martes": "1200",
+              "Miércoles": "1200",
+              "Jueves": "1200",
+              "Viernes": "1200",
+              "Sábado": "1200",
+              "Domingo": "1200"
+            }
+          },
+          {
+            'name': 'Deluxe Adultos',
+            'details': [
+              'Recogida en hotel',
+              'Transportación redonda',
+              'Box lunch a bordo del autobús',
+              'Bebidas a bordo del autobús',
+              'Guía certificado bilingüe (español-inglés)',
+              'Buffet comida regional',
+              '2 bebidas no alcohólicas en restaurante',
+              'Entrada a zona arqueológica',
+              'Visita guiada a la zona arqueológica',
+              'Nado en cenote',
+              'Tiempo para comprar artesanías'
+            ],
+            "prices": {
+              "Lunes": "1600",
+              "Martes": "1600",
+              "Miércoles": "1600",
+              "Jueves": "1600",
+              "Viernes": "1600",
+              "Sábado": "1600",
+              "Domingo": "1600"
+            }
           },
           {
             'name': 'Promo Mexicanos',
@@ -403,7 +586,16 @@ class BestNatureList extends StatelessWidget {
               'Visita guiada a la zona arqueológica',
               'Nado en cenote',
               'Tiempo para comprar artesanías'
-            ]
+            ],
+            "prices": {
+              "Lunes": "0",
+              "Martes": "0",
+              "Miércoles": "0",
+              "Jueves": "0",
+              "Viernes": "0",
+              "Sábado": "0",
+              "Domingo": "900"
+            }
           }
         ],
       },
@@ -423,17 +615,6 @@ class BestNatureList extends StatelessWidget {
             'En este fantástico tour "4x1" visita 4 atracciones turísticas en un solo día. Conoce acerca de la cultura maya en Tulum y tómate fotos en las pirámides que están frente al mar turquesa. \n\nDéjate sorprender por los 45 metros de altura de la pirámide "Nohoch Mool", donde sentirás la conexión con la naturaleza y la cultura maya. Podrás rentar una bicicleta para recorrer la zona arqueológica o un tricitaxi para transportarte.\n\nPara refrescarte nadaremos en un cenote subterráneo donde quedarás impresionado con las maravillas que la naturaleza crea.Además degustarás un exquisito buffet de comida regional yucateca como sopa de lima, cochinita pibil, papatzules, cotzitos, etc.\n\nTodo esto a bordo de un autobús de lujo con aire acondicionado y un guía bilingüe certificado que te llevará de la mano a todos y cada uno de los lugares',
         'closingTime': '3 A.M.',
         'transportation': 'Transportación a partir de 10 pax',
-        'prices': {
-          'Todos los dias': {
-            'Clásico Adultos': '1,200',
-            'Clásico Menores': '900',
-            'Deluxe Adultos': '1,600',
-            'Deluxe Menores': '1,100'
-          },
-          'Solo domingos': {
-            'Promoción Mexicanos': '900',
-          }
-        },
         'images': [
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/Tulúm%20%26%20Coba%206.jpg?alt=media&token=719e434e-a632-42a8-8b59-fc842d324f66',
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/g9.jpg?alt=media&token=1b0378d5-991a-419a-8b8f-1dc5e9108fbf',
@@ -449,7 +630,7 @@ class BestNatureList extends StatelessWidget {
         'subcategory': 'Most viewed',
         "packages": [
           {
-            "name": "Clásico",
+            "name": "Clásico Menores",
             "details": [
               "Recogida en hotel o punto de encuentro",
               "Transportación redonda",
@@ -459,10 +640,41 @@ class BestNatureList extends StatelessWidget {
               "Visita guiada en zonas arqueológicas",
               "Nado en cenote",
               "Visita rápida a la 5ta avenida"
-            ]
+            ],
+            "prices": {
+              "Lunes": "900",
+              "Martes": "900",
+              "Miércoles": "900",
+              "Jueves": "900",
+              "Viernes": "900",
+              "Sábado": "900",
+              "Domingo": "900"
+            }
           },
           {
-            "name": "Deluxe",
+            "name": "Clásico Adultos",
+            "details": [
+              "Recogida en hotel o punto de encuentro",
+              "Transportación redonda",
+              "Buffet comida regional",
+              "Guía certificado bilingüe (español-inglés)",
+              "Entrada a zonas arqueológicas",
+              "Visita guiada en zonas arqueológicas",
+              "Nado en cenote",
+              "Visita rápida a la 5ta avenida"
+            ],
+            "prices": {
+              "Lunes": "1200",
+              "Martes": "1200",
+              "Miércoles": "1200",
+              "Jueves": "1200",
+              "Viernes": "1200",
+              "Sábado": "1200",
+              "Domingo": "1200"
+            }
+          },
+          {
+            "name": "Deluxe Menores",
             "details": [
               "Recogida en hotel o punto de encuentro",
               "Transportación redonda",
@@ -475,7 +687,41 @@ class BestNatureList extends StatelessWidget {
               "Visita rápida a la 5ta avenida",
               "Buffet comida regional",
               "2 bebidas no alcohólicas en restaurante"
-            ]
+            ],
+            "prices": {
+              "Lunes": "1100",
+              "Martes": "1100",
+              "Miércoles": "1100",
+              "Jueves": "1100",
+              "Viernes": "1100",
+              "Sábado": "1100",
+              "Domingo": "1100"
+            }
+          },
+          {
+            "name": "Deluxe Adultos",
+            "details": [
+              "Recogida en hotel o punto de encuentro",
+              "Transportación redonda",
+              "Box lunch a bordo del autobús",
+              "Bebidas a bordo del autobús",
+              "Guía certificado bilingüe (español-inglés)",
+              "Entrada a zonas arqueológicas",
+              "Visita guiada en zonas arqueológicas",
+              "Nado en cenote",
+              "Visita rápida a la 5ta avenida",
+              "Buffet comida regional",
+              "2 bebidas no alcohólicas en restaurante"
+            ],
+            "prices": {
+              "Lunes": "1600",
+              "Martes": "1600",
+              "Miércoles": "1600",
+              "Jueves": "1600",
+              "Viernes": "1600",
+              "Sábado": "1600",
+              "Domingo": "1600"
+            }
           },
           {
             "name": "Promo Mexicanos",
@@ -488,7 +734,16 @@ class BestNatureList extends StatelessWidget {
               "Nado en cenote",
               "Visita rápida a la 5ta avenida",
               "Buffet comida regional",
-            ]
+            ],
+            "prices": {
+              "Lunes": "0",
+              "Martes": "0",
+              "Miércoles": "0",
+              "Jueves": "0",
+              "Viernes": "0",
+              "Sábado": "0",
+              "Domingo": "900"
+            }
           }
         ]
       },
@@ -514,15 +769,6 @@ class BestNatureList extends StatelessWidget {
             'Combinando la historia de la piratería con el lujo y tecnología moderna, nuestros Galeones están equipados con un sistema de audio, luz y video de última generación para un show nocturno espectacular en la cubierta principal. \n\nLa zona VIP ofrece vistas excelentes y atención personalizada, mientras que para cenar disponemos de salones climatizados temáticos.',
         'closingTime': '3 A.M.',
         'transportation': 'Transportación a partir de 10 pax',
-        'prices': {
-          'Todos los dias': {
-            'Vegetariana': '1,520',
-            'Pollo a la parrilla': '1,520',
-            'Corte New York': '1,710',
-            'Cola Langosta': '1,900',
-            'Mar y Tierra': '2,090'
-          },
-        },
         'images': [
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/19510389_1487819887923243_5911242965986903971_n.jpg?alt=media&token=eed0994e-6170-4dee-80ac-9f37a44f05a6',
           'https://firebasestorage.googleapis.com/v0/b/app-49894.appspot.com/o/IMG_9601.JPEG?alt=media&token=b5e9b62f-1ea8-4d98-8aa9-285e48070985',
@@ -537,16 +783,109 @@ class BestNatureList extends StatelessWidget {
         'subcategory': 'Most viewed',
         'packages': [
           {
-            'name': 'Normal',
+            'name': 'Vegetariana',
             'details': [
               'Actividades',
               'Show"s',
               'Concursos',
-              'Cena',
+              'Cena (dependiendo el paquete)',
               'Entrada a zona arqueológica',
               'Barra libre',
               'Niños de 2 a 11 años GRATIS',
-            ]
+            ],
+            "prices": {
+              "Lunes": "1520",
+              "Martes": "1520",
+              "Miércoles": "1520",
+              "Jueves": "1520",
+              "Viernes": "1520",
+              "Sábado": "1520",
+              "Domingo": "1520"
+            }
+          },
+          {
+            'name': 'Pollo a la parrilla',
+            'details': [
+              'Actividades',
+              'Show"s',
+              'Concursos',
+              'Cena (dependiendo el paquete)',
+              'Entrada a zona arqueológica',
+              'Barra libre',
+              'Niños de 2 a 11 años GRATIS',
+            ],
+            "prices": {
+              "Lunes": "1520",
+              "Martes": "1520",
+              "Miércoles": "1520",
+              "Jueves": "1520",
+              "Viernes": "1520",
+              "Sábado": "1520",
+              "Domingo": "1520"
+            }
+          },
+          {
+            'name': 'Corte New York ',
+            'details': [
+              'Actividades',
+              'Show"s',
+              'Concursos',
+              'Cena (dependiendo el paquete)',
+              'Entrada a zona arqueológica',
+              'Barra libre',
+              'Niños de 2 a 11 años GRATIS',
+            ],
+            "prices": {
+              "Lunes": "1520",
+              "Martes": "1520",
+              "Miércoles": "1520",
+              "Jueves": "1520",
+              "Viernes": "1520",
+              "Sábado": "1520",
+              "Domingo": "1520"
+            }
+          },
+          {
+            'name': 'Cola Langosta',
+            'details': [
+              'Actividades',
+              'Show"s',
+              'Concursos',
+              'Cena (dependiendo el paquete)',
+              'Entrada a zona arqueológica',
+              'Barra libre',
+              'Niños de 2 a 11 años GRATIS',
+            ],
+            "prices": {
+              "Lunes": "1900",
+              "Martes": "1900",
+              "Miércoles": "1900",
+              "Jueves": "1900",
+              "Viernes": "1900",
+              "Sábado": "1900",
+              "Domingo": "1900"
+            }
+          },
+          {
+            'name': 'Mar y Tierra',
+            'details': [
+              'Actividades',
+              'Show"s',
+              'Concursos',
+              'Cena (dependiendo el paquete)',
+              'Entrada a zona arqueológica',
+              'Barra libre',
+              'Niños de 2 a 11 años GRATIS',
+            ],
+            "prices": {
+              "Lunes": "2090",
+              "Martes": "2090",
+              "Miércoles": "2090",
+              "Jueves": "2090",
+              "Viernes": "2090",
+              "Sábado": "2090",
+              "Domingo": "2090"
+            }
           },
         ],
       },

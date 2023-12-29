@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 
 class PlaceDetailsScreen extends StatefulWidget {
   final String title;
   final String location;
-  final Map<String, dynamic> prices;
-  final List<String> imageUrls;
+   final List<String> imageUrls;
 
   final Map<String, dynamic> costExtra;
 
@@ -29,8 +29,7 @@ class PlaceDetailsScreen extends StatefulWidget {
 
   PlaceDetailsScreen({
     required this.title,
-    required this.location,
-    required this.prices,
+    required this.location, 
     required this.costExtra,
     required this.detalles,
     required this.imageUrls,
@@ -68,6 +67,43 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
   void initState() {
     super.initState();
   }
+
+List<Widget> _buildPriceListForWeek(Map<String, dynamic> prices) {
+    List<Widget> priceWidgets = [];
+    prices.forEach((day, price) {
+      priceWidgets.add(
+        Text('$day - $price MXN', style: TextStyle(fontSize: 16)),
+      );
+    });
+    return priceWidgets;
+  }
+
+  TableRow _buildPriceRow(String day, String price) {
+    return TableRow(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(day, style: TextStyle(fontSize: 16)),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text('$price MXN', style: TextStyle(fontSize: 16)),
+        ),
+      ],
+    );
+  }
+ Table _buildPriceTable(Map<String, dynamic> prices) {
+    return Table(
+      border: TableBorder.all(color: Colors.grey),
+      children: [
+        ...prices.keys.map((day) {
+          return _buildPriceRow(day, prices[day]);
+        }).toList(),
+      ],
+    );
+  }
+
+  String dayOfWeek = DateFormat('EEEE').format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -307,37 +343,37 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                               fontSize: 22, fontWeight: FontWeight.bold)),
                       SizedBox(height: 26),
 
+       
+              // Sección de Precios
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Precios:',
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold)),
+                    SizedBox(height: 16),
+                    ...widget.packages.map((package) {
+                      return Card(
+                        child: ExpansionTile(
+                          title: Text(
+                            package['name'],
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          children: [
+                            _buildPriceTable(package['prices']),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                ),
+              ),
+
                       Image.asset(widget.image_price),
                       SizedBox(height: 36),
-                      ListView.builder(
-                        physics:
-                            NeverScrollableScrollPhysics(), // para evitar el desplazamiento si está dentro de otro ScrollView
-                        shrinkWrap:
-                            true, // si está dentro de un Column/ListView para calcular la altura según los hijos
-                        itemCount: widget.prices.length,
-                        itemBuilder: (context, index) {
-                          String key = widget.prices.keys.elementAt(index);
-                          Map<String, String> priceEntry = widget.prices[key];
-                          return Card(
-                            margin: EdgeInsets.symmetric(vertical: 4.0),
-                            child: ListTile(
-                              title: Text('$key:',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold)),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: priceEntry.entries
-                                    .map((entry) => Text(
-                                          '${entry.key}: ${entry.value} MXN',
-                                          style: TextStyle(fontSize: 16),
-                                        ))
-                                    .toList(),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                      
                       SizedBox(height: 26),
                       Divider(
                         height: 4,
@@ -412,23 +448,18 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
                           child: ElevatedButton(
-                           onPressed: () {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ConfirmationScreen(
-          placeDetails: {
-            'title': widget.title,
-            'location': widget.location,
-             
-          },
-          packages: widget.packages,
-          prices: widget.prices,
-          costExtra: widget.costExtra,
-         
-        ),
-      ),
-    );
-  },
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ConfirmationScreen(
+                                     
+                                    title: widget.title, 
+                                    packages: widget.packages,
+                                  
+                                  ),
+                                ),
+                              );
+                            },
                             child: Text(
                               'Reservar ahora',
                               style: TextStyle(

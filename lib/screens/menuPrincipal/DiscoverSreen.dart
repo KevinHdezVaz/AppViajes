@@ -3,8 +3,7 @@ import 'package:appviajes/screens/profile/Historial.dart';
 import 'package:appviajes/services/Api/apiRest.dart';
 import 'package:flutter/material.dart';
 import 'package:particles_flutter/particles_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'BestNatureList.dart';
+ import 'BestNatureList.dart';
 
 class DiscoverScreen extends StatefulWidget {
   @override
@@ -190,8 +189,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       MaterialPageRoute(
                         builder: (context) => PlaceDetailsScreen(
                           title: spot['title'],
-                          location: spot['location'],
-                          prices: spot['prices']!!,
+                          location: spot['location'], 
                           image_price: spot['image_price'],
                           latitud: spot['latitud'],
                           longitud: spot['longitud'],

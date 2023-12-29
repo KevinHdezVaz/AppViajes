@@ -26,8 +26,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         MaterialPageRoute(
           builder: (context) => PlaceDetailsScreen(
             title: spot['title'],
-            location: spot['location'],
-            prices: spot['prices'],
+            location: spot['location'], 
             costExtra: spot['cost_extra'],
             latitud: spot['latitud'],
             longitud: spot['longitud'],

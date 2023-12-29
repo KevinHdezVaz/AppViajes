@@ -28,34 +28,58 @@ class _SignInRealState extends State<SignInReal> {
     super.dispose();
   }
 
-  Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true;
-    });
+@override
+void initState() {
+  super.initState();
+  _checkForToken();
+}
 
-     
-   var apiRest = ApiRest();
-    var response = await apiRest.login(
-        _emailController.text,
-        _passwordController.text
-       ); 
-      var data = json.decode(response.body);
-      var token =
-          data['access_token'];  
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
 
-      print("Token received: $token");
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MainMenu()),
-      );
+Future<void> _checkForToken() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('token');
+  if (token != null) {
     
-    setState(() {
-      _isLoading = false;
-    });
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MainMenu()),
+    );
   }
+}
+  Future<void> _signIn() async {
+  setState(() {
+    _isLoading = true;
+  });
+
+  var apiRest = ApiRest();
+  var response = await apiRest.login(
+    _emailController.text,
+    _passwordController.text
+  );
+
+  if (response.statusCode == 200) {
+    var data = json.decode(response.body);
+    var token = data['access_token'];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+
+    print("Token received: $token");
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MainMenu()),
+    );
+  } else {
+    // Manejar el error
+    print('Error: ${response.body}');
+  }
+
+  setState(() {
+    _isLoading = false;
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
