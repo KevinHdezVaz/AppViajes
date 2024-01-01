@@ -1,20 +1,25 @@
 import 'package:appviajes/models/SpotData.dart';
+import 'package:appviajes/screens/pagos/StripePaymentHandle.dart';
+import 'package:appviajes/services/Api/apiRest.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmationScreen extends StatefulWidget {
   final String title;
   final List<Map<String, dynamic>> packages;
+  final Map<String, dynamic> costExtra;
 
-  ConfirmationScreen({
-    Key? key,
-    required this.title,
-    required this.packages,
-  }) : super(key: key);
+  ConfirmationScreen(
+      {Key? key,
+      required this.title,
+      required this.packages,
+      required this.costExtra})
+      : super(key: key);
 
   @override
   _ConfirmationScreenState createState() => _ConfirmationScreenState();
@@ -27,11 +32,20 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
   double total = 0.0;
   bool isDateSelected = false;
   String? selectedHotel; // Variable para almacenar el hotel seleccionado
-String searchQuery = ""; 
-List<Map<String, dynamic>> filteredHotels = [];
+  String searchQuery = "";
+  List<Map<String, dynamic>> filteredHotels = [];
+  String? selectedCostExtraKey;
+  final TextEditingController _nombreController = TextEditingController();
 
+  final List<Map<String, dynamic>> hotels =
+      SpotData.listaHoteles["Hotel"] ?? [];
 
-  final List<Map<String, dynamic>> hotels =  SpotData.listaHoteles["Hotel"] ?? [];
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _nombreController.dispose();
+  }
 
   @override
   void initState() {
@@ -44,68 +58,86 @@ List<Map<String, dynamic>> filteredHotels = [];
         }
       });
     });
-      filteredHotels = hotels;
- 
+    if (widget.costExtra.isNotEmpty) {
+      selectedCostExtraKey = widget.costExtra.keys.first;
+    }
+    filteredHotels = hotels;
   }
 
- 
-
-void _showPackageDetails(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Detalles del Paquete'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: widget.packages.map((package) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      package['name'],
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    ...package['details'].map<Widget>((detail) {
-                      return Text('• $detail');
-                    }).toList(),
-                    SizedBox(height: 10),
-                    Text('Precios:'),
-                    ...package['prices'].entries.map<Widget>((entry) {
-                      return Text('${entry.key}: \$${entry.value}');
-                    }).toList(),
-                  ],
-                ),
-              );
-            }).toList(),
+  void _showPackageDetails(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Detalles del Paquete'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: widget.packages.map((package) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        package['name'],
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      ...package['details'].map<Widget>((detail) {
+                        return Text('• $detail');
+                      }).toList(),
+                      SizedBox(height: 10),
+                      Text('Precios:'),
+                      ...package['prices'].entries.map<Widget>((entry) {
+                        return Text('${entry.key}: \$${entry.value}');
+                      }).toList(),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
           ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text('Cerrar'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
+  bool _validateInputs() {
+      // Verifica si todos los campos requeridos han sido seleccionados
+  if (!isDateSelected ||
+      selectedPackage == null ||
+      selectedHotel == null ||
+      numberOfPassengers <= 0) {
+    return false;
+  }
 
-void _filterHotels(String query) {
-  List<Map<String, dynamic>> updatedList = hotels.where((hotel) {
-    return hotel['title'].toLowerCase().contains(query.toLowerCase());
-  }).toList();
+  // Verifica si el campo del nombre no está vacío y cumple con los criterios básicos
+  String nombre = _nombreController.text.trim(); // Elimina espacios en blanco al inicio y al final
+  if (nombre.isEmpty) {
+    return false;
+  }
+  
+  return true;
+       
+  }
 
-  setState(() {
-    searchQuery = query;
-    filteredHotels = updatedList;
-  });
-}
+  void _filterHotels(String query) {
+    List<Map<String, dynamic>> updatedList = hotels.where((hotel) {
+      return hotel['title'].toLowerCase().contains(query.toLowerCase());
+    }).toList();
+
+    setState(() {
+      searchQuery = query;
+      filteredHotels = updatedList;
+    });
+  }
 
   void _calculateTotal() {
     if (selectedPackage == null || !isDateSelected) {
@@ -124,7 +156,6 @@ void _filterHotels(String query) {
         });
       } else {
         String dayOfWeek = DateFormat('EEEE', 'es_ES').format(selectedDate);
-        // Capitalizar la primera letra del día de la semana para que coincida con el JSON
         dayOfWeek = '${dayOfWeek[0].toUpperCase()}${dayOfWeek.substring(1)}';
         var prices = package['prices'] as Map<String, dynamic>;
         var priceString = prices[dayOfWeek];
@@ -133,8 +164,31 @@ void _filterHotels(String query) {
           double priceForDay =
               double.tryParse(priceString.toString().replaceAll(',', '')) ??
                   0.0;
+          double extraCost = 0.0;
+          if (selectedCostExtraKey != null &&
+              widget.costExtra.containsKey(selectedCostExtraKey)) {
+            extraCost = double.tryParse(widget.costExtra[selectedCostExtraKey]
+                    .toString()
+                    .replaceAll(',', '')) ??
+                0.0;
+          }
+          String? extraCostString =
+              widget.costExtra[selectedCostExtraKey]?.toString();
+          if (extraCostString != null) {
+            // Eliminar caracteres no numéricos
+            extraCostString =
+                extraCostString.replaceAll(RegExp(r'[^0-9.]'), '');
+            extraCost = double.tryParse(extraCostString) ?? 0.0;
+          }
+
+          // Impresiones para depuración
+          print('Precio por día: $priceForDay');
+          print('Costo extra seleccionado: $selectedCostExtraKey');
+          print('Valor del costo extra: $extraCost');
+
           setState(() {
-            total = priceForDay * numberOfPassengers;
+            total = (priceForDay * numberOfPassengers) + extraCost;
+            print('Total calculado: $total'); // Impresión para depuración
           });
         } else {
           setState(() {
@@ -144,65 +198,64 @@ void _filterHotels(String query) {
       }
     }
   }
-Future<void> _showHotelSelectionModal(BuildContext context) async {
-  String? selectedHotelTemp = selectedHotel;
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: 'Buscar hotel',
-                  suffixIcon: Icon(Icons.search),
+
+  Future<void> _showHotelSelectionModal(BuildContext context) async {
+    String? selectedHotelTemp = selectedHotel;
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Buscar hotel',
+                    suffixIcon: Icon(Icons.search),
+                  ),
+                  onChanged: _filterHotels,
                 ),
-                onChanged: _filterHotels,
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: filteredHotels.length,
-                itemBuilder: (BuildContext context, int index) {
-  if (index < filteredHotels.length) {
-    return ListTile(
-      title: Text(filteredHotels[index]['title']),
-      onTap: () {
-        setState(() {
-          selectedHotelTemp = filteredHotels[index]['title'];
-        });
-        Navigator.of(context).pop();
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: filteredHotels.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index < filteredHotels.length) {
+                      return ListTile(
+                        title: Text(filteredHotels[index]['title']),
+                        onTap: () {
+                          setState(() {
+                            selectedHotelTemp = filteredHotels[index]['title'];
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    } else {
+                      // Manejo de índice fuera de rango
+                      return SizedBox();
+                    }
+                  },
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
       },
     );
-  } else {
-    // Manejo de índice fuera de rango
-    return SizedBox();
+
+    if (selectedHotelTemp != null) {
+      setState(() {
+        selectedHotel = selectedHotelTemp;
+      });
+    }
   }
-},
-
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        ),
-      );
-    },
-  );
-
-  if (selectedHotelTemp != null) {
-    setState(() {
-      selectedHotel = selectedHotelTemp;
-    });
-  }
-}
-
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -229,10 +282,7 @@ Future<void> _showHotelSelectionModal(BuildContext context) async {
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-
-        
         child: AnimationLimiter(
-          
           child: Column(
             children: AnimationConfiguration.toStaggeredList(
               duration: const Duration(milliseconds: 1375),
@@ -243,17 +293,40 @@ Future<void> _showHotelSelectionModal(BuildContext context) async {
                 ),
               ),
               children: [
-                 Column(
-                      children: [
-                        Lottie.asset(
-                          'assets/animacion/reserva.json',
-                          fit: BoxFit.cover,
-                          width: 200, // Establece el ancho deseado
-                          height: 200, // Establece el alto deseado
-                        ),
-                      ],
+                Column(
+                  children: [
+                    Lottie.asset(
+                      'assets/animacion/reserva.json',
+                      fit: BoxFit.cover,
+                      width: 200, // Establece el ancho deseado
+                      height: 200, // Establece el alto deseado
                     ),
-                    SizedBox(height: 26),
+                  ],
+                ),
+                SizedBox(height: 26),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Card(
+                    child: TextFormField(
+                      controller: _nombreController,
+
+                      decoration: InputDecoration(
+                        labelText: 'Nombre Completo', 
+                      enabledBorder: InputBorder.none, // Esto quita la línea cuando el TextField no está en foco.
+    focusedBorder: InputBorder.none, // Esto quita la línea cuando el TextField está en foco.
+    contentPadding: EdgeInsets.only(left: 10), // Añade algo de relleno dentro del TextField. 
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor introduce tu nombre completo';
+                        }
+                        return null; // Si el valor pasado es válido, devuelve null
+                      },
+                    ),
+                  ),
+                ),
+      
+                SizedBox(height: 26),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: Card(
@@ -261,161 +334,307 @@ Future<void> _showHotelSelectionModal(BuildContext context) async {
                       title: Text(isDateSelected
                           ? 'Fecha seleccionada: ${DateFormat('yyyy-MM-dd').format(selectedDate)}'
                           : 'Selecciona una fecha'),
-                      trailing: Icon(Icons.calendar_today),
+                      trailing: isDateSelected
+                          ? Icon(Icons.check, color: Colors.green)
+                          : Icon(Icons.calendar_today),
                       onTap: () => _selectDate(context),
                     ),
                   ),
                 ),
                 SizedBox(height: 26),
                 Padding(
-    padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Card(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Card(
                     child: ListTile(
                       title: Text('Número de Pasajeros'),
-                      trailing: DropdownButton<int>(
-                        value: numberOfPassengers,
-                        onChanged: (int? newValue) {
-                          setState(() {
-                            numberOfPassengers = newValue ?? 1;
-                            _calculateTotal();
-                          });
-                        },
-                        items: List.generate(10, (index) => index + 1)
-                            .map<DropdownMenuItem<int>>((int value) {
-                          return DropdownMenuItem<int>(
-                            value: value,
-                            child: Text(value.toString()),
-                          );
-                        }).toList(),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          DropdownButton<int>(
+                            value: numberOfPassengers,
+                            onChanged: (int? newValue) {
+                              setState(() {
+                                numberOfPassengers = newValue ?? 1;
+                                _calculateTotal();
+                              });
+                            },
+                            items: List.generate(10, (index) => index + 1)
+                                .map<DropdownMenuItem<int>>((int value) {
+                              return DropdownMenuItem<int>(
+                                value: value,
+                                child: Text(value.toString()),
+                              );
+                            }).toList(),
+                          ),
+                          // Ícono de verificación que se muestra solo cuando el número de pasajeros es seleccionado
+                          if (numberOfPassengers >
+                              0) // Asumiendo que 1 es el valor predeterminado y mínimo
+                            Icon(Icons.check, color: Colors.green),
+                        ],
                       ),
                     ),
                   ),
                 ),
                 SizedBox(height: 26),
                 Padding(
-                 padding: const EdgeInsets.only(left: 20, right: 20),        
-              child: Card(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Card(
                     child: ListTile(
-  title: Text('Seleccionar Paquete'),
-  trailing: Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      DropdownButton<String>(
-        value: selectedPackage,
-        onChanged: (String? newValue) {
-          setState(() {
-            selectedPackage = newValue;
-            _calculateTotal();
-          });
-        },
-        items: widget.packages
-            .map<DropdownMenuItem<String>>((package) {
-          return DropdownMenuItem<String>(
-            value: package['name'],
-            child: Text(package['name']),
-          );
-        }).toList(),
-        hint: selectedPackage == null
-            ? Text('Seleccione un paquete')
-            : null,
-      ),
-      IconButton(
-        icon: Icon(Icons.help_outline),
-        onPressed: () => _showPackageDetails(context),
-      ),
-    ],
-  ),
-)
-
-                  ),
-                ),SizedBox(height: 26),
-           // Reemplaza este Card por el botón de selección de hotel
-_buildHotelSelectionButton(context),
-SizedBox(height: 26),
-             Card(
-  child: DottedBorder(
-    dashPattern: [8, 4], // Esto define el patrón del punto y el espacio
-    strokeWidth: 2, // Esto define el grosor de la línea
-    color: Colors.grey, // Esto define el color de la línea punteada
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Total: ',
-              style: TextStyle(
-                fontSize: 24.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(
-              text: '\$${total.toStringAsFixed(2)} ',
-              style: TextStyle(
-                fontSize: 24.0,
-                color: Colors.green[700], // Un verde oscuro para el precio
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(
-              text: 'MXN',
-              style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.black54,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  ),
-),
-SizedBox(height: 26),
-
-               Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ConfirmationScreen(
-                                     
-                                    title: widget.title, 
-                                    packages: widget.packages,
-                                  
-                                  ),
-                                ),
-                              );
+                      title: Text('Seleccionar Paquete'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          DropdownButton<String>(
+                            value: selectedPackage,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedPackage = newValue;
+                                _calculateTotal();
+                              });
                             },
-                            child: Text(
-                              'Reservar ahora',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
+                            items: widget.packages
+                                .map<DropdownMenuItem<String>>((package) {
+                              return DropdownMenuItem<String>(
+                                value: package['name'],
+                                child: Text(package['name']),
+                              );
+                            }).toList(),
+                            hint: selectedPackage == null
+                                ? Text('Seleccione un paquete')
+                                : null,
+                          ),
+                          // Botón de ayuda para mostrar detalles
+                          IconButton(
+                            icon: Icon(Icons.help_outline),
+                            onPressed: () => _showPackageDetails(context),
+                          ),
+                          // Ícono de verificación que se muestra solo cuando un paquete es seleccionado
+                          if (selectedPackage != null)
+                            Icon(Icons.check, color: Colors.green),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 26),
+
+                if (widget.costExtra.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Card(
+                      child: ListTile(
+                        title: Text('Costos Extras'),
+                        trailing: ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width *
+                                  0.4), // Ajusta el 0.3 según sea necesario
+                          child: Row(
+                            mainAxisSize: MainAxisSize
+                                .min, // Importante para que se tome el mínimo espacio necesario
+                            children: [
+                              Expanded(
+                                child: DropdownButton<String>(
+                                  isExpanded:
+                                      true, // Importante para evitar el desbordamiento
+                                  value: selectedCostExtraKey,
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      selectedCostExtraKey = newValue;
+                                      _calculateTotal();
+                                    });
+                                  },
+                                  items: widget.costExtra.keys
+                                      .map<DropdownMenuItem<String>>(
+                                          (String key) {
+                                    return DropdownMenuItem<String>(
+                                      value: key,
+                                      child: Text(key +
+                                          ' - ' +
+                                          widget.costExtra[key].toString()),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
-                              primary: Theme.of(context).primaryColor,
-                            ),
+                              if (selectedCostExtraKey != null)
+                                Icon(Icons.check, color: Colors.green),
+                            ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 30),
+                    ),
+                  ),
+
+                SizedBox(height: 26),
+                // Reemplaza este Card por el botón de selección de hotel
+                _buildHotelSelectionButton(context),
+                SizedBox(height: 26),
+                Card(
+                  child: DottedBorder(
+                    dashPattern: [
+                      8,
+                      4
+                    ], // Esto define el patrón del punto y el espacio
+                    strokeWidth: 2, // Esto define el grosor de la línea
+                    color: Colors
+                        .grey, // Esto define el color de la línea punteada
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Total: ',
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '\$${total.toStringAsFixed(2)} ',
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                color: Colors.green[
+                                    700], // Un verde oscuro para el precio
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'MXN',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black54,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 26),
+
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                       // _sendReservationData();
+                      makeReservation();
+                      },
+                      child: Text(
+                        'Reservar ahora',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 50),
+                        primary: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
               ],
             ),
           ),
         ),
       ),
     );
-  }Widget _buildHotelSelectionButton(BuildContext context) {
-  return ElevatedButton(
-    onPressed: () => _showHotelSelectionModal(context),
-    child: Text(selectedHotel ?? 'Seleccionar Hotel'),
-  );
-}
+  }
+
+  Widget _buildHotelSelectionButton(BuildContext context) {
+    return SizedBox(
+      width:
+          300, // O puedes poner un ancho fijo, por ejemplo 300.0 para 300 píxeles de ancho
+      child: ElevatedButton.icon(
+        icon: selectedHotel != null
+            ? Icon(Icons.check,
+                color: Colors
+                    .green) // Muestra la palomita si hay un hotel seleccionado
+            : Container(), // Un contenedor vacío si no hay hotel seleccionado
+        label:
+            Text(selectedHotel ?? 'Selecciona tu hotel'), // El texto del botón
+        onPressed: () => _showHotelSelectionModal(context),
+      ),
+    );
+  }
+
+  final StripePaymentHandle stripePaymentHandle = StripePaymentHandle();
+
+ void  makeReservation() async {
+    // ... lógica para crear una reserva
+
+    try {
+      await stripePaymentHandle.stripeMakePayment();
+      // Aquí manejas la lógica después de un pago exitoso
+      // Por ejemplo, confirmar la reserva en tu servidor
+    } catch (e) {
+      // Manejo de errores
+      print('Error al realizar el pago: $e');
+    }
+  }
+
+
+  Future<void> _sendReservationData() async {
+    if (!_validateInputs()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text("Por favor, completa todos los campos requeridos")),
+      );
+      return;
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    String? authToken = prefs.getString('token');
+
+    print(authToken);
+    if (authToken == null) {
+      // authToken es null, maneja este caso aquí
+      // Por ejemplo, puedes redirigir al usuario a la pantalla de inicio de sesión
+      throw Exception('No se encontró el token de autenticación');
+    }
+    String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+    var costExtraValue = widget.costExtra[selectedCostExtraKey];
+// Usamos RegExp para extraer solo los números (y punto decimal) de la cadena
+    var numericValue =
+        RegExp(r'(\d+(\.\d+)?)').firstMatch(costExtraValue)?.group(1) ?? '0';
+
+    Map<String, dynamic> reservationData = {
+      'nombre':_nombreController.text,
+      'title':widget.title,
+      'travel_date': formattedDate,
+      'number_of_passengers': numberOfPassengers,
+      'package': selectedPackage,
+      'selectedHotel': selectedHotel.toString(),
+      'total': total,
+      'costExtra': selectedCostExtraKey != null
+          ? {selectedCostExtraKey: double.parse(numericValue)}
+          : {},
+    };
+
+    // Enviar los datos de la reserva
+    try {
+      ApiRest api = ApiRest();
+      var response = await api.sendReservation(reservationData, authToken);
+
+      print(reservationData);
+      print(authToken);
+      if (response.statusCode == 200) {
+        print('Reserva enviada con éxito');
+        // Realiza acciones después del éxito, como navegar a otra pantalla
+      } else {
+        print('Error al enviar la reserva: ${response.body}');
+        // Muestra un mensaje de error
+      }
+    } catch (e) {
+      print('Error al enviar la reserva: $e');
+      // Maneja el error, por ejemplo, mostrando un mensaje al usuario
+    }
+  }
 }

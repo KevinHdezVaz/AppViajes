@@ -1,9 +1,11 @@
 import 'package:appviajes/screens/details/PlaceDetailsScreen.dart';
 import 'package:appviajes/screens/profile/Historial.dart';
 import 'package:appviajes/services/Api/apiRest.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:particles_flutter/particles_flutter.dart';
- import 'BestNatureList.dart';
+import 'BestNatureList.dart';
 
 class DiscoverScreen extends StatefulWidget {
   @override
@@ -14,7 +16,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   int _selectedCategoryIndex = 0;
   String _selectedSubcategory = 'Most viewed';
   String userName = "Cargando..."; // Un valor predeterminado
-   var apiRest = ApiRest();
+  var apiRest = ApiRest();
   final List<Map<String, dynamic>> categories = [
     {'icon': Icons.explore, 'text': 'Antros'},
     {'icon': Icons.waves, 'text': 'Acuático'},
@@ -32,10 +34,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       _selectedSubcategory = 'Most viewed';
     });
   }
+
   @override
   void initState() {
     super.initState();
-    
   }
 
   void _onSubcategorySelected(String subcategory) {
@@ -68,7 +70,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title:   Row(
+        title: Row(
           children: [
             CircleAvatar(
               child: Icon(
@@ -78,21 +80,16 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               ),
             ),
             SizedBox(width: 10), // Espacio entre el avatar y el texto.
-      
-
-
-
           ],
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-
- Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Historial()),
-        );
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Historial()),
+              );
             },
           ),
         ],
@@ -130,23 +127,48 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Column(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment
-                            .start, // Alinea los hijos a la izquierda
+                       Column(
                         children: [
-                          Text(
-                            'Discover',
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                          Text(
-                            'Explora tu destino favorito.',
-                            style: TextStyle(color: Colors.grey, fontSize: 19),
+                          Lottie.asset(
+                            'assets/animacion/reserva.json',
+                            fit: BoxFit.cover,
+                            width: 300, // Establece el ancho deseado
+                            height: 200, // Establece el alto deseado
                           ),
                         ],
                       ),
+                      Card(
+                        child: DottedBorder(
+                          dashPattern: [
+                            8,
+                            4
+                          ], // Esto define el patrón del punto y el espacio
+                          strokeWidth: 2, // Esto define el grosor de la línea
+                          color: Colors
+                              .grey, // Esto define el color de la línea punteada
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Let´s Party',
+                                  
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize:35) ,
+                                ),
+                                Text(
+                                  'Explora tu destino favorito.',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 153, 28, 215), fontSize: 19),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
 
                       SizedBox(height: 20), // Espacio entre widgets
-
+                      
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Padding(
@@ -189,7 +211,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       MaterialPageRoute(
                         builder: (context) => PlaceDetailsScreen(
                           title: spot['title'],
-                          location: spot['location'], 
+                          location: spot['location'],
                           image_price: spot['image_price'],
                           latitud: spot['latitud'],
                           longitud: spot['longitud'],
@@ -204,7 +226,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                               'detalles'], // Aquí deberías pasar la duración real,
                           rating: 4.7, // Aquí deberías pasar el rating real
                           packages: spot['packages'],
-                           
+
                           membersCount:
                               20, // Aquí deberías pasar el número real de miembros
                         ),
@@ -255,5 +277,4 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       ),
     );
   }
-    
 }

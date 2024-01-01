@@ -20,6 +20,22 @@ class ApiRest {
     return response;
   }
   
+
+
+
+Future<http.Response> sendReservation(Map<String, dynamic> reservationData, String token) async {
+  final response = await http.post(
+    Uri.parse('$baseUrl/reservations'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token', // Utiliza el token de autenticación
+    },
+    body: jsonEncode(reservationData),
+  );
+  return response;
+}
+
+
 // Aquí está la función modificada para integrarse en tu clase ApiRest
   Future<List<dynamic>> fetchUserReservations(String token) async {
     final response = await http.get(
@@ -29,6 +45,9 @@ class ApiRest {
         'Content-Type': 'application/json',
       },
     );
+
+
+    
 
     if (response.statusCode == 200) {
       return json.decode(response.body);

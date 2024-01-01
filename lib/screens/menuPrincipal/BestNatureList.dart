@@ -24,7 +24,8 @@ class BestNatureList extends StatelessWidget {
         'precio': '1,462',
         'image_price': "assets/images/cocobongo_precio.png",
         'cost_extra': {
-          'Ninguno': '',
+          'Ninguno': '0 MXN',
+             
         },
         'nota': 'Transportación a partir de 10 pax',
         'detalles':
@@ -144,7 +145,7 @@ class BestNatureList extends StatelessWidget {
         'longitud': -86.74684188334079,
         'image_price': "assets/images/beach_cocobongo.png",
         'cost_extra': {
-          'Ninguno': '',
+            'Ninguno': '0 MXN',
         },
         'nota': 'Transportación a partir de 10 pax',
         'detalles':
@@ -254,7 +255,7 @@ class BestNatureList extends StatelessWidget {
         'image_price': "assets/images/congobar.png",
         'closingTime': '3 A.M.',
         'cost_extra': {
-          'Ninguno': '',
+            'Ninguno': '0 MXN',
         },
         'nota': 'Transportación a partir de 10 pax',
         'detalles':
@@ -364,6 +365,7 @@ class BestNatureList extends StatelessWidget {
         'longitud': -86.73555932253596,
         'image_price': "assets/images/islamujer.png",
         'cost_extra': {
+            'Ninguno': '0 MXN',
           'Impuesto de muelle': '360 MXN',
           'Transportación redonda': '190 MXN'
         },
@@ -456,7 +458,7 @@ class BestNatureList extends StatelessWidget {
         'location': 'Cancún',
         'openingTime': '9 P.M.',
         'cost_extra': {
-          'Ninguno': '',
+          'Ninguno': '0 MXN',
         },
         'latitud': 20.68432348897362,
         'longitud': -88.56779588670287,
@@ -608,7 +610,7 @@ class BestNatureList extends StatelessWidget {
         'longitud': -87.46516059163379,
         'image_price': "assets/images/chichenitza.png",
         'cost_extra': {
-          'Ninguno': '',
+          'Ninguno': '0 MXN',
         },
         'nota': 'Hora de recogida dependerá del hotel',
         'detalles':
@@ -760,6 +762,7 @@ class BestNatureList extends StatelessWidget {
         'longitud': -86.78627714437395,
         'image_price': "assets/images/barcopirata.png",
         'cost_extra': {
+            'Ninguno': '0 MXN',
           'Impuesto de muelle': '360 MXN',
           'Transportación redonda': '190 MXN',
         },
