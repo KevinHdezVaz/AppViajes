@@ -36,9 +36,17 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
   List<Map<String, dynamic>> filteredHotels = [];
   String? selectedCostExtraKey;
   final TextEditingController _nombreController = TextEditingController();
-
+  String totalForStripe ="";
   final List<Map<String, dynamic>> hotels =
       SpotData.listaHoteles["Hotel"] ?? [];
+
+
+final TextEditingController _cityController = TextEditingController();
+final TextEditingController _countryController = TextEditingController();
+final TextEditingController _postalCodeController = TextEditingController();
+final TextEditingController _stateController = TextEditingController();
+// ... otros controladores que necesites ...
+
 
   @override
   void dispose() {
@@ -187,9 +195,13 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
           print('Valor del costo extra: $extraCost');
 
           setState(() {
-            total = (priceForDay * numberOfPassengers) + extraCost;
-            print('Total calculado: $total'); // Impresión para depuración
-          });
+  total = (priceForDay * numberOfPassengers) + extraCost;
+  // Redondear al entero más cercano y convertir a String para Stripe
+    totalForStripe = (total).round().toString();
+  print('Total calculado: $total'); // Impresión para depuración
+  print('Total para Stripe (en centavos): $totalForStripe'); // Impresión para depuración
+});
+
         } else {
           setState(() {
             total = 0.0;
@@ -285,7 +297,7 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
         child: AnimationLimiter(
           child: Column(
             children: AnimationConfiguration.toStaggeredList(
-              duration: const Duration(milliseconds: 1375),
+              duration: const Duration(milliseconds: 800),
               childAnimationBuilder: (widget) => SlideAnimation(
                 verticalOffset: 44.0,
                 child: FadeInAnimation(
@@ -523,7 +535,8 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                        // _sendReservationData();
-                      makeReservation();
+                    //  makeReservation();
+                          _showPaymentDetailsDialog();
                       },
                       child: Text(
                         'Reservar ahora',
@@ -571,14 +584,75 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
     // ... lógica para crear una reserva
 
     try {
-      await stripePaymentHandle.stripeMakePayment();
-      // Aquí manejas la lógica después de un pago exitoso
-      // Por ejemplo, confirmar la reserva en tu servidor
+//      await stripePaymentHandle.stripeMakePayment(totalForStripe); 
+await stripePaymentHandle.stripeMakePayment(
+    totalForStripe, // Valor
+    'John Doe', // Nombre
+    'johndoe@example.com', // Email
+    '1234567890', // Teléfono
+    'Ciudad', // Ciudad
+    'País', // País
+    'Calle 123', // Linea 1
+    'Departamento 2', // Linea 2
+    '12345', // Código Postal
+    'Estado' // Estado
+);
+
+     
     } catch (e) {
       // Manejo de errores
       print('Error al realizar el pago: $e');
     }
   }
+Future<void> _showPaymentDetailsDialog() async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // El usuario debe tocar el botón para cerrar el diálogo
+        builder: (BuildContext context) {
+            return AlertDialog(
+                title: Text('Detalles de Pago'),
+                content: SingleChildScrollView(
+                    child: ListBody(
+                        children: <Widget>[
+                            TextFormField(
+                                controller: _cityController,
+                                decoration: InputDecoration(hintText: 'Ciudad'),
+                            ),
+                            TextFormField(
+                                controller: _countryController,
+                                decoration: InputDecoration(hintText: 'País'),
+                            ),
+                            TextFormField(
+                                controller: _postalCodeController,
+                                decoration: InputDecoration(hintText: 'Código Postal'),
+                            ),
+                            TextFormField(
+                                controller: _stateController,
+                                decoration: InputDecoration(hintText: 'Estado/Provincia'),
+                            ),
+                            // ... otros campos de texto según sea necesario ...
+                        ],
+                    ),
+                ),
+                actions: <Widget>[
+                    TextButton(
+                        child: Text('Cancelar'),
+                        onPressed: () {
+                            Navigator.of(context).pop();
+                        },
+                    ),
+                    TextButton(
+                        child: Text('Confirmar'),
+                        onPressed: () {
+                            // Aquí puedes llamar a la función para procesar el pago
+                          //  _processPayment();
+                        },
+                    ),
+                ],
+            );
+        },
+    );
+}
 
 
   Future<void> _sendReservationData() async {

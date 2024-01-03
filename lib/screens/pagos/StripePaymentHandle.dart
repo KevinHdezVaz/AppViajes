@@ -8,10 +8,15 @@ import 'package:http/http.dart' as http;
 
 class StripePaymentHandle {
   Map<String, dynamic>? paymentIntent;
+  TextEditingController addressLine1Controller = TextEditingController();
+TextEditingController postalCodeController = TextEditingController();
+TextEditingController cityController = TextEditingController();
+TextEditingController stateController = TextEditingController();
+TextEditingController countryController = TextEditingController();
 
-  Future<void> stripeMakePayment() async {
+  Future<void> stripeMakePayment(String valor) async {
     try {
-      paymentIntent = await createPaymentIntent('100', 'INR');
+      paymentIntent = await createPaymentIntent(valor, 'MXN');
       await Stripe.instance
           .initPaymentSheet(
               paymentSheetParameters: SetupPaymentSheetParameters(

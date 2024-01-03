@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiRest {
-  final String baseUrl = "http://192.168.11.15:8000/api"; // Reemplaza con la URL de tu API
+  final String baseUrl = "https://viajes.kavemx.com/api"; // Reemplaza con la URL de tu API
  
   Future<http.Response> register(String name, String email, String password, String passwordConfirmation) async {
     final response = await http.post(
