@@ -535,8 +535,8 @@ final TextEditingController _stateController = TextEditingController();
                     child: ElevatedButton(
                       onPressed: () {
                        // _sendReservationData();
-                    //  makeReservation();
-                          _showPaymentDetailsDialog();
+                      makeReservation();
+                     //     _showPaymentDetailsDialog();
                       },
                       child: Text(
                         'Reservar ahora',
@@ -586,16 +586,7 @@ final TextEditingController _stateController = TextEditingController();
     try {
 //      await stripePaymentHandle.stripeMakePayment(totalForStripe); 
 await stripePaymentHandle.stripeMakePayment(
-    totalForStripe, // Valor
-    'John Doe', // Nombre
-    'johndoe@example.com', // Email
-    '1234567890', // Teléfono
-    'Ciudad', // Ciudad
-    'País', // País
-    'Calle 123', // Linea 1
-    'Departamento 2', // Linea 2
-    '12345', // Código Postal
-    'Estado' // Estado
+    totalForStripe, 
 );
 
      
