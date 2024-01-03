@@ -75,14 +75,17 @@ void _checkOnboardingComplete() async {
   }
 
   Widget _indicator(bool isActive) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 150),
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
-      height: 8.0,
-      width: isActive ? 24.0 : 16.0,
-      decoration: BoxDecoration(
-        color: isActive ? Color.fromARGB(252, 84, 0, 132)  : Colors.grey,
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 150),
+        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        height: 15.0,
+        width: isActive ? 24.0 : 16.0,
+        decoration: BoxDecoration(
+          color: isActive ? Color.fromARGB(252, 84, 0, 132)  : Colors.grey,
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
       ),
     );
   }
