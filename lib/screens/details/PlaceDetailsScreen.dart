@@ -151,29 +151,7 @@ body: NotificationListener<ScrollNotification>(
          child: Stack(
           children: [
             
-            CircularParticle(
-              key: UniqueKey(),
-              awayRadius: 10,
-              numberOfParticles: 30,
-              speedOfParticles: 1,
-              height: screenHeight,
-              width: screenWidth,
-              onTapAnimation: true,
-              particleColor: Colors.white.withAlpha(150),
-              awayAnimationDuration: Duration(milliseconds: 600),
-              maxParticleSize: 4,
-              isRandSize: true,
-              isRandomColor: true,
-              randColorList: [
-                Color.fromARGB(255, 232, 171, 29),
-                Color.fromARGB(252, 84, 0, 132)
-              ],
-              awayAnimationCurve: Curves.bounceIn,
-              enableHover: true,
-              hoverColor: Colors.white,
-              hoverRadius: 10,
-              connectDots: false, //not recommended
-            ),
+            
         
           
             SingleChildScrollView(
@@ -366,9 +344,7 @@ body: NotificationListener<ScrollNotification>(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Precios:',
-                                  style: TextStyle(
-                                      fontSize: 22, fontWeight: FontWeight.bold)),
+                          
                               SizedBox(height: 16),
                               ...widget.packages.map((package) {
                                 return Card(

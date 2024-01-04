@@ -8,13 +8,8 @@ import 'package:http/http.dart' as http;
 
 class StripePaymentHandle {
   Map<String, dynamic>? paymentIntent;
-  TextEditingController addressLine1Controller = TextEditingController();
-TextEditingController postalCodeController = TextEditingController();
-TextEditingController cityController = TextEditingController();
-TextEditingController stateController = TextEditingController();
-TextEditingController countryController = TextEditingController();
 
-  Future<void> stripeMakePayment(String valor) async {
+  Future<bool> stripeMakePayment(String valor) async {
     try {
       paymentIntent = await createPaymentIntent(valor, 'MXN');
       await Stripe.instance
@@ -22,7 +17,7 @@ TextEditingController countryController = TextEditingController();
               paymentSheetParameters: SetupPaymentSheetParameters(
                   billingDetails: BillingDetails(
                       name: 'YOUR NAME',
-                      email: 'YOUREMAIL@gmail.com',
+                      email: 'kevinhdezvaz@gmail.com',
                       phone: 'YOUR NUMBER',
                       address: Address(
                           city: 'YOUR CITY',
@@ -38,10 +33,15 @@ TextEditingController countryController = TextEditingController();
           .then((value) {});
 
       //STEP 3: Display Payment sheet
-      displayPaymentSheet();
+      //  displayPaymentSheet();
+
+      // Intenta mostrar el sheet de pago y retorna verdadero si tiene éxito
+      await Stripe.instance.presentPaymentSheet();
+      return true; // Pago exitoso
     } catch (e) {
       print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
+      return false; // Pago fallido o cancelado
     }
   }
 
@@ -50,14 +50,19 @@ TextEditingController countryController = TextEditingController();
       // 3. display the payment sheet.
       await Stripe.instance.presentPaymentSheet();
 
-      Fluttertoast.showToast(msg: 'Payment succesfully completed');
+      // Notifica al usuario que el pago se completó con éxito
+      Fluttertoast.showToast(msg: 'Pago realizado con éxito');
+
+      
     } on Exception catch (e) {
       if (e is StripeException) {
         Fluttertoast.showToast(
-            msg: 'Error from Stripe: ${e.error.localizedMessage}');
+            msg: 'Error de Stripe: ${e.error.localizedMessage}');
       } else {
-        Fluttertoast.showToast(msg: 'Unforeseen error: ${e}');
+        Fluttertoast.showToast(msg: 'Error no previsto: ${e}');
       }
+      // Lanza una excepción para que el bloque catch de makeReservation se ejecute
+      throw e;
     }
   }
 

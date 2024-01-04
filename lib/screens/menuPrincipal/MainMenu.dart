@@ -1,6 +1,7 @@
 import 'package:appviajes/screens/details/PlaceDetailsScreen.dart';
 import 'package:appviajes/screens/explorar/ExploreScreen.dart';
 import 'package:appviajes/screens/menuPrincipal/DiscoverSreen.dart';
+import 'package:appviajes/screens/profile/Historial.dart';
 import 'package:appviajes/screens/profile/ProfileScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -570,6 +571,7 @@ class _MainMenuState extends State<MainMenu> {
   final List<Widget> _widgetOptions = [
     DiscoverScreen(),  
     ExploreScreen(categorySpots: categorySpots),  
+        Historial(), 
     ProfileScreen(), 
   ];
 
@@ -598,14 +600,19 @@ class _MainMenuState extends State<MainMenu> {
             icon: Icon(Icons.search),
             label: 'Explorar',
           ),
+           BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Reservas',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             label: 'Profile',
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromARGB(218, 178, 70, 211),
-        onTap: _onItemTapped,
+    currentIndex: _selectedIndex,
+  selectedItemColor: Colors.purple, // Color seleccionado
+  unselectedItemColor: Colors.grey, // Color para ítems no seleccionados
+  onTap: _onItemTapped,
       )    );
  
   }

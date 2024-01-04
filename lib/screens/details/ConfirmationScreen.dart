@@ -1,7 +1,8 @@
 import 'package:appviajes/models/SpotData.dart';
 import 'package:appviajes/screens/pagos/StripePaymentHandle.dart';
+import 'package:appviajes/screens/profile/Historial.dart';
 import 'package:appviajes/services/Api/apiRest.dart';
-import 'package:dotted_border/dotted_border.dart';
+ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -36,17 +37,16 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
   List<Map<String, dynamic>> filteredHotels = [];
   String? selectedCostExtraKey;
   final TextEditingController _nombreController = TextEditingController();
-  String totalForStripe ="";
+  String totalForStripe = "";
   final List<Map<String, dynamic>> hotels =
       SpotData.listaHoteles["Hotel"] ?? [];
 
-
-final TextEditingController _cityController = TextEditingController();
-final TextEditingController _countryController = TextEditingController();
-final TextEditingController _postalCodeController = TextEditingController();
-final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _postalCodeController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
 // ... otros controladores que necesites ...
-
+  bool _isMakingReservation = false;
 
   @override
   void dispose() {
@@ -118,22 +118,22 @@ final TextEditingController _stateController = TextEditingController();
   }
 
   bool _validateInputs() {
-      // Verifica si todos los campos requeridos han sido seleccionados
-  if (!isDateSelected ||
-      selectedPackage == null ||
-      selectedHotel == null ||
-      numberOfPassengers <= 0) {
-    return false;
-  }
+    // Verifica si todos los campos requeridos han sido seleccionados
+    if (!isDateSelected ||
+        selectedPackage == null ||
+        selectedHotel == null ||
+        numberOfPassengers <= 0) {
+      return false;
+    }
 
-  // Verifica si el campo del nombre no está vacío y cumple con los criterios básicos
-  String nombre = _nombreController.text.trim(); // Elimina espacios en blanco al inicio y al final
-  if (nombre.isEmpty) {
-    return false;
-  }
-  
-  return true;
-       
+    // Verifica si el campo del nombre no está vacío y cumple con los criterios básicos
+    String nombre = _nombreController.text
+        .trim(); // Elimina espacios en blanco al inicio y al final
+    if (nombre.isEmpty) {
+      return false;
+    }
+
+    return true;
   }
 
   void _filterHotels(String query) {
@@ -195,13 +195,13 @@ final TextEditingController _stateController = TextEditingController();
           print('Valor del costo extra: $extraCost');
 
           setState(() {
-  total = (priceForDay * numberOfPassengers) + extraCost;
-  // Redondear al entero más cercano y convertir a String para Stripe
-    totalForStripe = (total).round().toString();
-  print('Total calculado: $total'); // Impresión para depuración
-  print('Total para Stripe (en centavos): $totalForStripe'); // Impresión para depuración
-});
-
+            total = (priceForDay * numberOfPassengers) + extraCost;
+            // Redondear al entero más cercano y convertir a String para Stripe
+            totalForStripe = (total).round().toString();
+            print('Total calculado: $total'); // Impresión para depuración
+            print(
+                'Total para Stripe (en centavos): $totalForStripe'); // Impresión para depuración
+          });
         } else {
           setState(() {
             total = 0.0;
@@ -321,12 +321,15 @@ final TextEditingController _stateController = TextEditingController();
                   child: Card(
                     child: TextFormField(
                       controller: _nombreController,
-
                       decoration: InputDecoration(
-                        labelText: 'Nombre Completo', 
-                      enabledBorder: InputBorder.none, // Esto quita la línea cuando el TextField no está en foco.
-    focusedBorder: InputBorder.none, // Esto quita la línea cuando el TextField está en foco.
-    contentPadding: EdgeInsets.only(left: 10), // Añade algo de relleno dentro del TextField. 
+                        labelText: 'Nombre Completo',
+                        enabledBorder: InputBorder
+                            .none, // Esto quita la línea cuando el TextField no está en foco.
+                        focusedBorder: InputBorder
+                            .none, // Esto quita la línea cuando el TextField está en foco.
+                        contentPadding: EdgeInsets.only(
+                            left:
+                                10), // Añade algo de relleno dentro del TextField.
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -337,7 +340,7 @@ final TextEditingController _stateController = TextEditingController();
                     ),
                   ),
                 ),
-      
+
                 SizedBox(height: 26),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20),
@@ -532,24 +535,20 @@ final TextEditingController _stateController = TextEditingController();
                   alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                       // _sendReservationData();
-                      makeReservation();
-                     //     _showPaymentDetailsDialog();
-                      },
-                      child: Text(
-                        'Reservar ahora',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(double.infinity, 50),
-                        primary: Theme.of(context).primaryColor,
-                      ),
-                    ),
+                    child: _isMakingReservation
+                        ? CircularProgressIndicator() // Muestra la animación de carga
+                        : ElevatedButton(
+                            onPressed: makeReservation,
+                            child: Text(
+                              'Reservar ahora',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 50),
+                              primary: Theme.of(context).primaryColor,
+                            ),
+                          ),
                   ),
                 ),
                 SizedBox(height: 30),
@@ -580,71 +579,101 @@ final TextEditingController _stateController = TextEditingController();
 
   final StripePaymentHandle stripePaymentHandle = StripePaymentHandle();
 
- void  makeReservation() async {
-    // ... lógica para crear una reserva
+  void makeReservation() async {
+    if (!_validateInputs()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text("Por favor, completa todos los campos requeridos")),
+      );
+      return;
+    }
+    setState(() {
+      _isMakingReservation = true; // Iniciar la animación de carga
+    });
 
     try {
-//      await stripePaymentHandle.stripeMakePayment(totalForStripe); 
-await stripePaymentHandle.stripeMakePayment(
-    totalForStripe, 
-);
+      // Intenta realizar el pago
+      bool paymentSuccess =
+          await stripePaymentHandle.stripeMakePayment(totalForStripe);
 
-     
+      // Si el pago es exitoso, realiza la reserva
+      if (paymentSuccess) {
+        await _sendReservationData();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Reserva y pago completados con éxito")),
+        );
+
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => Historial(),
+          ),
+        );
+      } else {
+        print('Pago fallido o cancelado');
+      }
     } catch (e) {
       // Manejo de errores
-      print('Error al realizar el pago: $e');
+      print('Error al realizar el pago o enviar la reserva: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error al realizar el pago: $e")),
+      );
+    } finally {
+      setState(() {
+        _isMakingReservation = false; // Detener la animación de carga
+      });
     }
   }
-Future<void> _showPaymentDetailsDialog() async {
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: false, // El usuario debe tocar el botón para cerrar el diálogo
-        builder: (BuildContext context) {
-            return AlertDialog(
-                title: Text('Detalles de Pago'),
-                content: SingleChildScrollView(
-                    child: ListBody(
-                        children: <Widget>[
-                            TextFormField(
-                                controller: _cityController,
-                                decoration: InputDecoration(hintText: 'Ciudad'),
-                            ),
-                            TextFormField(
-                                controller: _countryController,
-                                decoration: InputDecoration(hintText: 'País'),
-                            ),
-                            TextFormField(
-                                controller: _postalCodeController,
-                                decoration: InputDecoration(hintText: 'Código Postal'),
-                            ),
-                            TextFormField(
-                                controller: _stateController,
-                                decoration: InputDecoration(hintText: 'Estado/Provincia'),
-                            ),
-                            // ... otros campos de texto según sea necesario ...
-                        ],
-                    ),
-                ),
-                actions: <Widget>[
-                    TextButton(
-                        child: Text('Cancelar'),
-                        onPressed: () {
-                            Navigator.of(context).pop();
-                        },
-                    ),
-                    TextButton(
-                        child: Text('Confirmar'),
-                        onPressed: () {
-                            // Aquí puedes llamar a la función para procesar el pago
-                          //  _processPayment();
-                        },
-                    ),
-                ],
-            );
-        },
-    );
-}
 
+  Future<void> _showPaymentDetailsDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible:
+          false, // El usuario debe tocar el botón para cerrar el diálogo
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Detalles de Pago'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextFormField(
+                  controller: _cityController,
+                  decoration: InputDecoration(hintText: 'Ciudad'),
+                ),
+                TextFormField(
+                  controller: _countryController,
+                  decoration: InputDecoration(hintText: 'País'),
+                ),
+                TextFormField(
+                  controller: _postalCodeController,
+                  decoration: InputDecoration(hintText: 'Código Postal'),
+                ),
+                TextFormField(
+                  controller: _stateController,
+                  decoration: InputDecoration(hintText: 'Estado/Provincia'),
+                ),
+                // ... otros campos de texto según sea necesario ...
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Confirmar'),
+              onPressed: () {
+                // Aquí puedes llamar a la función para procesar el pago
+                //  _processPayment();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<void> _sendReservationData() async {
     if (!_validateInputs()) {
@@ -671,12 +700,12 @@ Future<void> _showPaymentDetailsDialog() async {
         RegExp(r'(\d+(\.\d+)?)').firstMatch(costExtraValue)?.group(1) ?? '0';
 
     Map<String, dynamic> reservationData = {
-      'nombre':_nombreController.text,
-      'title':widget.title,
+      'nombre': _nombreController.text,
+      'title': widget.title,
       'travel_date': formattedDate,
       'number_of_passengers': numberOfPassengers,
       'package': selectedPackage,
-      'selectedHotel': selectedHotel.toString(),
+      'selectedHotel': selectedHotel,
       'total': total,
       'costExtra': selectedCostExtraKey != null
           ? {selectedCostExtraKey: double.parse(numericValue)}
