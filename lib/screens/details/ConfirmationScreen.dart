@@ -2,7 +2,7 @@ import 'package:appviajes/models/SpotData.dart';
 import 'package:appviajes/screens/pagos/StripePaymentHandle.dart';
 import 'package:appviajes/screens/profile/Historial.dart';
 import 'package:appviajes/services/Api/apiRest.dart';
- import 'package:dotted_border/dotted_border.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -45,6 +45,8 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
   final TextEditingController _countryController = TextEditingController();
   final TextEditingController _postalCodeController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
+      TextEditingController _fechahoy = TextEditingController();
+
 // ... otros controladores que necesites ...
   bool _isMakingReservation = false;
 
@@ -53,11 +55,14 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
     // TODO: implement dispose
     super.dispose();
     _nombreController.dispose();
+    _fechahoy.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+ 
+
     initializeDateFormatting('es_ES', null).then((_) {
       setState(() {
         if (widget.packages.isNotEmpty) {
@@ -65,6 +70,14 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
           _calculateTotal();
         }
       });
+  DateTime now = DateTime.now();
+    String formattedDate = DateFormat('d \'de\' MMMM \'del\' yyyy', 'es_ES').format(now);
+    String formattedTime = DateFormat('HH:mm').format(now);
+
+    _fechahoy = TextEditingController(
+      text: '$formattedDate $formattedTime',
+    );
+
     });
     if (widget.costExtra.isNotEmpty) {
       selectedCostExtraKey = widget.costExtra.keys.first;
@@ -482,6 +495,26 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
                 SizedBox(height: 26),
                 // Reemplaza este Card por el botón de selección de hotel
                 _buildHotelSelectionButton(context),
+  TextFormField(
+                      controller: _fechahoy,
+                      decoration: InputDecoration(
+                        labelText: 'Nombre Completo',
+                        enabledBorder: InputBorder
+                            .none, // Esto quita la línea cuando el TextField no está en foco.
+                        focusedBorder: InputBorder
+                            .none, // Esto quita la línea cuando el TextField está en foco.
+                        contentPadding: EdgeInsets.only(
+                            left:
+                                10), // Añade algo de relleno dentro del TextField.
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor introduce tu nombre completo';
+                        }
+                        return null; // Si el valor pasado es válido, devuelve null
+                      },
+                    ),
+
                 SizedBox(height: 26),
                 Card(
                   child: DottedBorder(
@@ -707,6 +740,7 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
       'package': selectedPackage,
       'selectedHotel': selectedHotel,
       'total': total,
+      'fechahoy': DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()),
       'costExtra': selectedCostExtraKey != null
           ? {selectedCostExtraKey: double.parse(numericValue)}
           : {},

@@ -1,41 +1,137 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 
-class ReservationDetailsScreen extends StatelessWidget {
+class ReservationDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> reservation;
 
   ReservationDetailsScreen({Key? key, required this.reservation})
       : super(key: key);
 
   @override
+  _ReservationDetailsScreenState createState() =>
+      _ReservationDetailsScreenState();
+}
+
+class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
+  late ScreenshotController screenshotController;
+
+  @override
+  void initState() {
+    super.initState();
+    screenshotController = ScreenshotController();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> costExtra = reservation['costExtra'] ?? {};
-  ThemeData theme = Theme.of(context);
+    Map<String, dynamic> costExtra = widget.reservation['costExtra'] ?? {};
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles de la Reserva',style: TextStyle(color: Colors.white),),
-          backgroundColor: theme.primaryColor,
+        title: Text(
+          'Detalles de la Reserva',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: theme.primaryColor,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buildDetailCard('Nombre', reservation['nombre'], Icons.person),
-            _buildDetailCard('Fecha', reservation['travel_date'], Icons.calendar_today),
-            _buildDetailCard('Paquete', reservation['package'], Icons.card_giftcard),
-            _buildDetailCard('Hotel', reservation['selectedHotel'], Icons.hotel),
-            _buildDetailCard('Total', reservation['total']?.toString(), Icons.attach_money),
-            _buildCostExtraSection(costExtra),
-          ],
+        child: Screenshot(
+          
+          controller: screenshotController,
+          child: Container(
+            
+                  margin: EdgeInsets.zero,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.0)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Image(image: AssetImage('assets/images/arriba.png')),
+                ),
+                _buildDetailCard(
+            'ID',
+            widget.reservation['id'].toString(),
+            Icons.phone_iphone_outlined
+                      ),
+                      
+                _buildDetailCard(
+                    'Nombre', widget.reservation['nombre'], Icons.person),
+                _buildDetailCard('Fecha de reserva', widget.reservation['travel_date'],
+                    Icons.calendar_today),
+                _buildDetailCard('Paquete', widget.reservation['package'],
+                    Icons.card_giftcard),
+                _buildDetailCard(
+                    'Hotel', widget.reservation['selectedHotel'], Icons.hotel),
+                _buildDetailCard('Total', widget.reservation['total']?.toString(),
+                    Icons.attach_money),
+                _buildDetailCard(
+                    'Fecha en la que lo realizo',
+                    widget.reservation['fechahoy']?.toString(),
+                    Icons.calendar_month_rounded),
+                _buildCostExtraSection(costExtra),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "OBSERVACIONES",
+                  style: TextStyle(color: Colors.black),
+                ),
+                Text(
+                  style: TextStyle(fontSize: 10),
+                  "DEBERA PRESENTAR ESTE CUPON IMPRESO O DIGITAL AL MOMENTO DEL PICK UP/CHECK IN PARA PODER ACCEDER AL SERVICIO PREVIAMENTE CONTRATADO Y SU IDENTIFICACIÓN.SI TIENE ALGUN BALANCE PENDIENTE DEBERA LIQUIDARLO DURANTE EL CHECK IN. PARA PROMOCIONES DEBERAN PRESENTAR UNA IDENTIFICACION QUE DEMUESTRE LA EDAD Y/O NACIONALIDAD DE LOS ADULTOS, MENORES E INFANTES PARA JUSTIFICAR EL PRECIO, DE LO CONTRARIO EL PROVEEDOR DEL SERVICIO PODRA COBRARLE LA DIFERENCI DEL TICKET SIN PROMOCIÓN. SE LE RECOMIENDA ESTAR PRESENTE EN EL LOBBY DEL HOTEL O EL PUNTO DE ENCUENTRO 5 MINUTOS ANTES PARA REALIZAR EL CHECK IN. EN CASO DE NO PRESENTARSE SE TOMARA COMO NO SHOW Y NO SE REALIZARA LA DEVOLUCIÓN DEL MONTO PAGADO, SE RE-AGENDARA CONFORME A LAS POLITICAS ESTABLECIDAS POR EL PROVEEDOR DEL SERVICIO.",
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "CANCELACIONES",
+                  style: TextStyle(color: Colors.black),
+                ),
+                Text(
+                  style: TextStyle(fontSize: 10),
+                  "TODA CANCELACIÓN SE DEBERA HACER CON 24 HORAS DE ANTICIPACIÓN A LA ACTIVIDAD, DE LO CONTRARIO NO SE HARA CANCELACIÓN Y PODRA HABER UN CARGO CONFORME A LAS POLITICAS DEL PROVEEDOR DEL SERVICIO TURISTICO. PARA RESERVAS ADQUIRIDAS CON PROMOCIONES, DESCUENTOS O PAQUETES NO HAY CANCELACIONES NI DEVOLUCIONES.",
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "DUDAS O ACLARACIONES",
+                  style: TextStyle(color: Colors.black),
+                ),
+                Text(
+                  style: TextStyle(fontSize: 10),
+                  "PUEDE CONTACTARNOS MEDIANTE WHATSAPP PARA CUALQUIER DUDA O ACLARACIÓN RESPECTO A SU RESERVACIÓN O CUALQUIER COMENTARIO RESPECTO AL SERVICIO.",
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "WHATSAPP: (+52) 9983706776",
+                  style: TextStyle(color: Colors.black),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: Image(image: AssetImage('assets/images/footer.png')),
+                )
+              ],
+            ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => generateAndShowPdf(context),
-        child: Icon(Icons.print),
-        tooltip: 'Generar Comprobante',
+        onPressed: () => captureAndSaveScreenshot(context),
+        child: Icon(Icons.camera_alt),
+        tooltip: 'Tomar y Guardar Captura',
       ),
     );
   }
@@ -69,58 +165,22 @@ class ReservationDetailsScreen extends StatelessWidget {
     );
   }
 
-  Future<void> generateAndShowPdf(BuildContext context) async {
-    final pdf = pw.Document();
+  void captureAndSaveScreenshot(BuildContext context) async {
+    
+    Uint8List? imageBytes = await screenshotController.capture();
 
-    pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Header(
-                level: 0,
-                child: pw.Text('Detalles de la Reserva', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
-              ),
-              pw.Divider(),
-              _buildPdfDetailSection('Nombre', reservation['nombre']),
-              _buildPdfDetailSection('Fecha', reservation['travel_date']),
-              _buildPdfDetailSection('Paquete', reservation['package']),
-              _buildPdfDetailSection('Hotel', reservation['selectedHotel']),
-              _buildPdfCostExtraSection(reservation['costExtra']),
-            ],
-          );
-        },
-      ),
-    );
+    if (imageBytes != null) {
+      final directory = await getTemporaryDirectory();
+      final filePath = '${directory.path}/screenshot.png';
 
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdf.save(),
-    );
-  }
+      await File(filePath).writeAsBytes(imageBytes);
 
-  pw.Widget _buildPdfDetailSection(String title, String? value) {
-    return pw.Padding(
-      padding: pw.EdgeInsets.symmetric(vertical: 2),
-      child: pw.Row(
-        children: [
-          pw.Expanded(child: pw.Text(title, style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-          pw.Expanded(child: pw.Text(value ?? 'No disponible', textAlign: pw.TextAlign.right)),
-        ],
-      ),
-    );
-  }
-
-  pw.Widget _buildPdfCostExtraSection(Map<String, dynamic>? costExtra) {
-    return pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        pw.Padding(
-          padding: pw.EdgeInsets.symmetric(vertical: 5),
-          child: pw.Text('Costos Extras:', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-        ),
-        ...costExtra?.entries.map((entry) => _buildPdfDetailSection(entry.key, entry.value.toString())) ?? [],
-      ],
-    );
+      final result = await ImageGallerySaver.saveFile(filePath);
+      print("Imagen guardada en: $result");
+      Fluttertoast.showToast(msg: 'Comprobante guardado en tu');
+    } else {
+      // Manejar el caso cuando la captura de pantalla falla
+      print("Error al capturar la pantalla");
+    }
   }
 }

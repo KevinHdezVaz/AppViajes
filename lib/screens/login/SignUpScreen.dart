@@ -70,10 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
 
       if (userCredential.user != null) {
-
-
-   
-      
+ 
     var apiRest = ApiRest();
     var response = await apiRest.register(
         _nameController.text,
@@ -84,12 +81,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Después del registro o inicio de sesión exitoso
 SharedPreferences prefs = await SharedPreferences.getInstance();
 await prefs.setString('userName', _nameController.text); // Guardar el nombre del usuario
+ 
 
+  if (response.statusCode == 200) {
+    var data = json.decode(response.body);
+    var token = data['access_token'];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainMenu()),
-        );
+    print("Token received: $token");
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MainMenu()),
+    );
+  } else {
+    // Manejar el error
+    print('Error: ${response.body}');
+  }
+
+        
+
       }
     } on FirebaseAuthException catch (e) {
       String errorMessage = "An error occurred, please try again.";
