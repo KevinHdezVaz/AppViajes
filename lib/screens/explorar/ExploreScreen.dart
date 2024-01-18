@@ -83,19 +83,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ),
                 SizedBox(
                     width: 10), // Espacio entre el campo de búsqueda y el botón
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(252, 84, 0, 132),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.tune, color: Colors.white),
-                    onPressed: () {
-                      // Acción del botón de filtro
-                    },
-                  ),
-                ),
+                
               ],
             ),
           ),

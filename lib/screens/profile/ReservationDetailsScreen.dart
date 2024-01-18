@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:open_file/open_file.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
@@ -41,36 +42,31 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Screenshot(
-          
           controller: screenshotController,
           child: Container(
-            
-                  margin: EdgeInsets.zero,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                            borderRadius: BorderRadius.circular(15.0)),
+            margin: EdgeInsets.zero,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(15.0)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
                   child: Image(image: AssetImage('assets/images/arriba.png')),
                 ),
-                _buildDetailCard(
-            'ID',
-            widget.reservation['id'].toString(),
-            Icons.phone_iphone_outlined
-                      ),
-                      
+                _buildDetailCard('ID', widget.reservation['id'].toString(),
+                    Icons.phone_iphone_outlined),
                 _buildDetailCard(
                     'Nombre', widget.reservation['nombre'], Icons.person),
-                _buildDetailCard('Fecha de reserva', widget.reservation['travel_date'],
-                    Icons.calendar_today),
+                _buildDetailCard('Fecha de reserva',
+                    widget.reservation['travel_date'], Icons.calendar_today),
                 _buildDetailCard('Paquete', widget.reservation['package'],
                     Icons.card_giftcard),
                 _buildDetailCard(
                     'Hotel', widget.reservation['selectedHotel'], Icons.hotel),
-                _buildDetailCard('Total', widget.reservation['total']?.toString(),
+                _buildDetailCard(
+                    'Total',
+                    widget.reservation['total']?.toString(),
                     Icons.attach_money),
                 _buildDetailCard(
                     'Fecha en la que lo realizo',
@@ -166,18 +162,35 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
   }
 
   void captureAndSaveScreenshot(BuildContext context) async {
-    
     Uint8List? imageBytes = await screenshotController.capture();
 
     if (imageBytes != null) {
-      final directory = await getTemporaryDirectory();
-      final filePath = '${directory.path}/screenshot.png';
+      final directory = await getExternalStorageDirectory();
 
-      await File(filePath).writeAsBytes(imageBytes);
+      // Verificar si se obtuvo el directorio externo
+      if (directory != null) {
+        final downloadsDirectory = Directory('${directory.path}/Download');
 
-      final result = await ImageGallerySaver.saveFile(filePath);
-      print("Imagen guardada en: $result");
-      Fluttertoast.showToast(msg: 'Comprobante guardado en tu');
+        // Crear la carpeta "Download" si no existe
+        if (!await downloadsDirectory.exists()) {
+          await downloadsDirectory.create(recursive: true);
+        }
+
+        final filePath = '${downloadsDirectory.path}/screenshot.png';
+
+        await File(filePath).writeAsBytes(imageBytes);
+
+        final result = await ImageGallerySaver.saveFile(filePath);
+        print("Imagen guardada en: $result");
+
+        // Abrir el archivo en el explorador de archivos
+        OpenFile.open(filePath);
+
+        Fluttertoast.showToast(
+            msg: 'Comprobante guardado en tu carpeta de Descargas');
+      } else {
+        print("Error al obtener el directorio externo");
+      }
     } else {
       // Manejar el caso cuando la captura de pantalla falla
       print("Error al capturar la pantalla");

@@ -20,18 +20,14 @@ class ProfileScreen extends StatelessWidget {
       ),
       body: ListView(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: CircleAvatar(
-              radius: 50, // Tamaño del avatar
-              backgroundColor: Color.fromARGB(252, 84, 0, 132),
-              child: Icon(
-                Icons.edit, // Ícono de editar
-                color: Color.fromARGB(252, 84, 0, 132),
-                size: 50, // Tamaño del ícono
-              ),
-            ),
-          ),
+         Padding(
+  padding: const EdgeInsets.all(16.0),
+  child: CircleAvatar(
+    radius: 100, // Tamaño del avatar
+    backgroundImage: AssetImage('assets/logox.webp'),
+  ),
+),
+
           Center(
             child: FutureBuilder(
               future: SharedPreferences.getInstance(),
@@ -50,34 +46,8 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
           ),
-          _buildCustomListTile(
-            leadingIcon: Icons.edit,
-            title: 'Edit Profile',
-            onTap: () {
-              // Acción al tocar 'Edit Profile'
-            },
-          ),
-          _buildCustomListTile(
-            leadingIcon: Icons.edit,
-            title: 'Edit Profile',
-            onTap: () {
-              // Acción al tocar 'Edit Profile'
-            },
-          ),
-          _buildCustomListTile(
-            leadingIcon: Icons.edit,
-            title: 'Edit Profile',
-            onTap: () {
-              // Acción al tocar 'Edit Profile'
-            },
-          ),
-          _buildCustomListTile(
-            leadingIcon: Icons.edit,
-            title: 'Cerrar sesion',
-            onTap: () {
-              // Acción al tocar 'Edit Profile'
-            },
-          ),
+ 
+        
           SizedBox(height: 40),
           _buildLogoutTile(context)
         ],
@@ -96,26 +66,22 @@ class ProfileScreen extends StatelessWidget {
         ),
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: Color.fromARGB(252, 84, 0, 132),
-            child:
+             child:
                 Icon(Icons.exit_to_app, color: Color.fromARGB(252, 84, 0, 132)),
           ),
           title: Text('Cerrar sesión', style: TextStyle(color: Colors.black)),
           onTap: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.remove('token');
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (context) => SignInScreen()),
-  
+            await prefs.remove('token');
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => SignInScreen()),
             );
           },
         ),
       ),
     );
   }
- 
-
 
   Widget _buildCustomListTile({
     required IconData leadingIcon,

@@ -34,6 +34,7 @@ dependencies:
   printing: ^5.11.1
   screenshot: ^2.1.0
   image_gallery_saver: ^2.0.3
+  open_file: ^3.3.2
 
 # PAYMENTS
   flutter_stripe: ^10.0.0
@@ -69,4 +70,5 @@ flutter:
     - assets/.env
     - assets/onboarding/
     - assets/animacion/
+    - assets/
  
